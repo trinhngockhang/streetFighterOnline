@@ -37,12 +37,13 @@ public class Controller : MonoBehaviour
         socket.On("PLAY", OnUserPlay);
         _makeInstance();
         socket.On("MOVE", onUserMove);
+        socket.On("OTHERPLAYERCHANGEVELOCITY", onUserChange);
         socket.On("GETID", getMyId);
         socket.On("USER_DISCONNECTED", OnUserDisConnected);
         socket.On("OTHERPLAYERFIRE", otherPlayerPunch);
         // joyStick.gameObject.SetActive(false);
         loginPanel.playBtn.onClick.AddListener(OnClickPlayBtn);
-        joyStick.onCommanMove += OnCommandMove;
+        // joyStick.onCommanMove += OnCommandMove;
     }
     void _makeInstance()
     {
@@ -58,6 +59,15 @@ public class Controller : MonoBehaviour
         myId = s;
         Debug.Log("id tu server nay: " + s);
     }
+    public void ChangeVelocity(string direct){
+        Debug.Log("doi van toc len server");
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data["direction"] = direct;
+        data["id"] = idPlayer2;
+        data["id"] = data["id"].Remove(0, 1);
+        data["id"] = data["id"].Remove(data["id"].Length - 1, 1);
+        socket.Emit("CHANGEVELOCITY", new JSONObject(data));
+    }
     public void OnCommandMove(Vector2 vec2,int angle)
     {
         Dictionary<string, string> data = new Dictionary<string, string>();
@@ -72,21 +82,34 @@ public class Controller : MonoBehaviour
 
     void onUserMove(SocketIOEvent obj)
     {
-        Debug.Log("GEt the message server: " + obj + "user connected");
-        Debug.Log("Position enemy: " + JsontoVector2(JsonToString(obj.data.GetField("position").ToString(), "\"")));
+        // Debug.Log("Position enemy: " + JsontoVector2(JsonToString(obj.data.GetField("position").ToString(), "\"")));
      //   GameObject player = GameObject.Find(JsonToString(obj.data.GetField("name").ToString(), "\" ")) as GameObject;
         //player.transform.position = JsontoVector2(JsonToString(obj.data.GetField("position").ToString(), "\""));
+        
         Player2.transform.position = JsontoVector2(JsonToString(obj.data.GetField("position").ToString(), "\""));
         string s = obj.data.GetField("angle").ToString();
         s = s.Remove(0, 1);
         s = s.Remove(s.Length - 1, 1);
         int n = int.Parse(s);
         // otherPlayCom.direct = n;
-        Debug.Log("s ne: " + s.Length);
-        Player2.transform.eulerAngles = new Vector3(0, 0, n);
-        Debug.Log("name move: "+ obj.data.GetField("name").ToString());
+        // Debug.Log("s ne: " + s.Length);
+        otherPlayCom.stopMove();
+        Player2.transform.eulerAngles = new Vector3(0, n, 0);
+        // Debug.Log("name move: "+ obj.data.GetField("name").ToString());
     }
-
+    void onUserChange(SocketIOEvent obj){
+        Debug.Log("Thay doi van toc thanh: " + obj);
+        string direct = obj.data.GetField("direction").ToString();
+        Debug.Log("phia nhan duoc la" + direct);
+        direct = direct.Remove(0, 1);
+        direct = direct.Remove(direct.Length - 1, 1);
+        if (direct == "left"){
+            Debug.Log("di chuyen sang trai");
+            otherPlayCom.velocityBack();
+        }else{
+            otherPlayCom.velocityFoward();
+        }
+    }
     void OnClickPlayBtn()
     {
         if(loginPanel.inputField.text != "")
@@ -135,12 +158,12 @@ public class Controller : MonoBehaviour
         if (firstPlayerinRoom)
         {
             temp = spawnPositionSecond;
-            otherPlayer = GameObject.Instantiate(playGameobjFirst.gameObject, temp, Quaternion.Euler(0, 180, 0)) as GameObject;
+            otherPlayer = GameObject.Instantiate(playGameobjSecond.gameObject, temp, Quaternion.Euler(0, 180, 0)) as GameObject;
         }
         else
         {
             temp = spawnPositionFirst;
-            otherPlayer = GameObject.Instantiate(playGameobjSecond.gameObject, temp, Quaternion.identity) as GameObject;
+            otherPlayer = GameObject.Instantiate(playGameobjFirst.gameObject, temp, Quaternion.identity) as GameObject;
         }
         Debug.Log("GEt the message server: " + evt + "user connected") ;
 
@@ -161,12 +184,12 @@ public class Controller : MonoBehaviour
         if (!firstPlayerinRoom)
         {
             temp = spawnPositionSecond;
-            player = GameObject.Instantiate(playGameobjFirst.gameObject, temp, Quaternion.Euler(0, 180, 0)) as GameObject;
+            player = GameObject.Instantiate(playGameobjSecond.gameObject, temp, Quaternion.Euler(0, 180, 0)) as GameObject;
         }
         else
         {
             temp = spawnPositionFirst;
-            player = GameObject.Instantiate(playGameobjSecond.gameObject, temp, Quaternion.identity) as GameObject;
+            player = GameObject.Instantiate(playGameobjFirst.gameObject, temp, Quaternion.identity) as GameObject;
         }
         Debug.Log("GEt the message server: " + evt + "userplay");
         Map.gameObject.SetActive(true);

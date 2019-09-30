@@ -1,6 +1,6 @@
 OSXStandalone
 PlayerPath?
-/Users/apple/Documents/Code/Tank Online/Build File/LTU_fighter_001.app
+/Users/apple/Documents/Code/Tank Online/Build File/LTU_fighter_003.app
 SceneListBegin?
 Assets/Scenes/GamePlay.unity
 SceneListEnd?

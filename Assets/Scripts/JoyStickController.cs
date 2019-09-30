@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class JoyStickController : MonoBehaviour {
     public delegate void OnMove(Vector2 vector2,int angle);
-    public event OnMove onCommanMove;
     public WachButton Left;
     public WachButton Right;
     public WachButton BackWard;
@@ -92,7 +91,10 @@ public class JoyStickController : MonoBehaviour {
             if(!lastLeft){
                 setAllMoveFalse();
                 lastLeft = true;
+                // di chuyen nhan vat
                 player.moveBack();
+                // gui len server
+                Controller.instance.ChangeVelocity("left");
             }
         }
         else if (rightMove || Input.GetKey("d"))
@@ -100,7 +102,10 @@ public class JoyStickController : MonoBehaviour {
             if(!lastRight){
                 setAllMoveFalse();
                 lastRight = true;
+                // di chuyen nhan vat
                 player.moveFoward();
+                // gui len server
+                Controller.instance.ChangeVelocity("right");
             }
         }
         else
@@ -108,7 +113,8 @@ public class JoyStickController : MonoBehaviour {
             player.stopMove();
             if (lastLeft || lastRight)
             {
-                int n = lastLeft ? 0 : 180;
+                Debug.Log("vua di chuyen xong");
+                int n = lastLeft ? 180 : 0;
                 player.updatePositionToServer(n);
             }
             setAllMoveFalse();

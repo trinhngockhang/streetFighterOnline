@@ -84,20 +84,29 @@ public class Player : MonoBehaviour {
         return false;
     }
     public void moveBack(){
-        myBody.velocity = new Vector2(-6f, 0);
-        if(firstPlayer && rightLook)
+        velocityBack();
+        if (firstPlayer && rightLook)
         this.transform.eulerAngles = new Vector3(0, 180 , 0);
         m_Animator.SetTrigger("player_move");
         rightLook = false;
-        updatePositionToServer(0);
+        // updatePositionToServer(0);
+    }
+
+    public void velocityBack(){
+        Debug.Log("chay sang ben trai");
+        myBody.velocity = new Vector2(-6f, 0);
+    }
+
+    public void velocityFoward(){
+        myBody.velocity = new Vector2(6f, 0);
     }
 
     public void moveFoward(){
-        myBody.velocity = new Vector2(6f, 0);
+        velocityFoward();
         if (firstPlayer && !rightLook)
         this.transform.eulerAngles = new Vector3(0, 0, 0);
         rightLook = true;
-        updatePositionToServer(180);  
+        // updatePositionToServer(180);
     }
     public void updatePositionToServer(int n){
         Controller.instance.OnCommandMove(this.transform.position, n);

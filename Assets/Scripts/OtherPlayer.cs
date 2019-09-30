@@ -15,12 +15,12 @@ public class OtherPlayer : MonoBehaviour {
     }
     void onUserMove(SocketIOEvent obj)
     {
-        Debug.Log("GEt the message server: " + obj + "user connected");
-        Debug.Log("Position enemy: " + JsontoVector2(JsonToString(obj.data.GetField("position").ToString(), "\"")));
-        //   GameObject player = GameObject.Find(JsonToString(obj.data.GetField("name").ToString(), "\" ")) as GameObject;
-        //player.transform.position = JsontoVector2(JsonToString(obj.data.GetField("position").ToString(), "\""));
-        playerEnemy.transform.position = JsontoVector2(JsonToString(obj.data.GetField("position").ToString(), "\""));
-        Debug.Log("name move: " + obj.data.GetField("name").ToString());
+        //Debug.Log("GEt the message server: " + obj + "user connected");
+        //Debug.Log("Position enemy: " + JsontoVector2(JsonToString(obj.data.GetField("position").ToString(), "\"")));
+        ////   GameObject player = GameObject.Find(JsonToString(obj.data.GetField("name").ToString(), "\" ")) as GameObject;
+        ////player.transform.position = JsontoVector2(JsonToString(obj.data.GetField("position").ToString(), "\""));
+        //playerEnemy.transform.position = JsontoVector2(JsonToString(obj.data.GetField("position").ToString(), "\""));
+        //Debug.Log("name move: " + obj.data.GetField("name").ToString());
     }
  
     Vector2 JsontoVector2(string target)
