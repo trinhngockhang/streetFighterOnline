@@ -29,6 +29,8 @@ public class Player : MonoBehaviour {
     private HealthBar HealthImage;
     // la player ben nao
     private bool firstPlayer;
+    // 1 dung,2 ngoi,3 nhay
+    public int state = 1;
     public void test(){
         Debug.Log("chay dc ne");
     }
@@ -77,37 +79,57 @@ public class Player : MonoBehaviour {
     // check xem dang danh nhau hay ko
     public bool checkAttacking()
     {
-        if (m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_H_punch"))
+        if (m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_H_punch")
+           || m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_M_punch"))
         {
             return true;
         }
         return false;
     }
+    // sang trai
     public void moveBack(){
         velocityBack();
-        if (firstPlayer && rightLook)
-        this.transform.eulerAngles = new Vector3(0, 180 , 0);
-        m_Animator.SetTrigger("player_move");
-        rightLook = false;
-        // updatePositionToServer(0);
+        if (state == 1){
+            m_Animator.ResetTrigger("player_idle");
+            m_Animator.SetTrigger("player_move");
+        }
     }
-
+    // thay doi van toc de sang trai
     public void velocityBack(){
         Debug.Log("chay sang ben trai");
         myBody.velocity = new Vector2(-6f, 0);
+        this.transform.eulerAngles = new Vector3(0, 180, 0);
+        rightLook = false;
     }
-
+    // thay doi van toc de sang phai
     public void velocityFoward(){
         myBody.velocity = new Vector2(6f, 0);
-    }
-
-    public void moveFoward(){
-        velocityFoward();
-        if (firstPlayer && !rightLook)
         this.transform.eulerAngles = new Vector3(0, 0, 0);
         rightLook = true;
-        // updatePositionToServer(180);
     }
+    // sang phai
+    public void moveFoward(){
+        velocityFoward();
+        if (state == 1)
+        {
+            m_Animator.ResetTrigger("player_idle");
+            m_Animator.SetTrigger("player_move");
+        }
+    }
+    // ngoi xuong
+    public void moveDown(){
+        m_Animator.ResetTrigger("player_idle");
+        m_Animator.SetTrigger("player_sit");
+        state = 2;
+    }
+    // dung len
+    public void standUp()
+    {
+        m_Animator.ResetTrigger("player_sit");
+        m_Animator.SetTrigger("player_idle");
+        state = 1;
+    }
+
     public void updatePositionToServer(int n){
         Controller.instance.OnCommandMove(this.transform.position, n);
     }
@@ -115,7 +137,11 @@ public class Player : MonoBehaviour {
     public void stopMove(){
         if (!this.checkAttacking())
         {
-            m_Animator.Play("player_idle");
+            Debug.Log("set status");
+            if(state == 1)
+            m_Animator.SetTrigger("player_idle");
+            else if(state == 2)
+            m_Animator.SetTrigger("player_sit");
         }
         myBody.velocity = new Vector2(0, 0);
     }
@@ -124,11 +150,15 @@ public class Player : MonoBehaviour {
         if (!this.checkAttacking())
         {
             this.animationPunch();
+            // gui len server
             Controller.instance.h_punch();
         }
     }
     public void animationPunch(){
-        m_Animator.Play("player_H_punch");
+        if (state == 1)
+            m_Animator.Play("player_H_punch");
+        else if (state == 2)
+            m_Animator.Play("player_M_punch");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -165,11 +195,12 @@ public class Player : MonoBehaviour {
         if ((positionEnemyX > positionPlayerX && rightLook) || (positionEnemyX < positionPlayerX && !rightLook))
         {
             Player player2 = collision.gameObject.GetComponent<Player>();
-            if (m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_H_punch") && !attacked)
+            if ((m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_H_punch")
+              || m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_M_punch")) 
+              && !attacked)
             {
                 player2.hit();
                 attacked = true;
-                Controller.instance.h_punch();
             }
         }
     }

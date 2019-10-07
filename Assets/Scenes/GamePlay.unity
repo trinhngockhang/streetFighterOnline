@@ -856,8 +856,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1246, y: 191.4}
-  m_SizeDelta: {x: 167.2, y: 127.7}
+  m_AnchoredPosition: {x: 1166.8, y: 257.1}
+  m_SizeDelta: {x: 116, y: 93.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &487024956
 MonoBehaviour:
@@ -1790,7 +1790,7 @@ Prefab:
     - target: {fileID: 114841248202830826, guid: 0020fa647f232b44f8e0508702e07e04,
         type: 2}
       propertyPath: url
-      value: ws://52.231.163.176:6969/socket.io/?EIO=4&transport=websocket
+      value: ws://localhost:6969/socket.io/?EIO=4&transport=websocket
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0020fa647f232b44f8e0508702e07e04, type: 2}
@@ -2867,7 +2867,7 @@ MonoBehaviour:
   textWin: {fileID: 1200172405}
   Back: {fileID: 1093576911}
   Map: {fileID: 1480564461}
-  bg: {fileID: 0}
+  bg: {fileID: 464660566}
   info: {fileID: 400660821}
   healthbar1: {fileID: 617355626}
   healthbar2: {fileID: 1720479067}
@@ -3417,12 +3417,12 @@ Prefab:
     - target: {fileID: 114212434859906248, guid: 196b51fbb262a104889f84358d056e2c,
         type: 2}
       propertyPath: m_Color.a
-      value: 0.5529412
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114312900598668380, guid: 196b51fbb262a104889f84358d056e2c,
         type: 2}
       propertyPath: m_FontData.m_FontSize
-      value: 31
+      value: 51
       objectReference: {fileID: 0}
     - target: {fileID: 114312900598668380, guid: 196b51fbb262a104889f84358d056e2c,
         type: 2}
@@ -3432,7 +3432,7 @@ Prefab:
     - target: {fileID: 114659090238989846, guid: 196b51fbb262a104889f84358d056e2c,
         type: 2}
       propertyPath: m_Color.a
-      value: 0.5529412
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114238313384758770, guid: 196b51fbb262a104889f84358d056e2c,
         type: 2}
@@ -3501,11 +3501,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1188256153126380, guid: 196b51fbb262a104889f84358d056e2c, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1459887196655280, guid: 196b51fbb262a104889f84358d056e2c, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114900774182104650, guid: 196b51fbb262a104889f84358d056e2c,
         type: 2}
@@ -3582,6 +3582,60 @@ Prefab:
       propertyPath: player
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 1459887196655280, guid: 196b51fbb262a104889f84358d056e2c, type: 2}
+      propertyPath: m_Name
+      value: Up
+      objectReference: {fileID: 0}
+    - target: {fileID: 224029328932732860, guid: 196b51fbb262a104889f84358d056e2c,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 118.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 224029328932732860, guid: 196b51fbb262a104889f84358d056e2c,
+        type: 2}
+      propertyPath: m_SizeDelta.y
+      value: 73.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114212434859906248, guid: 196b51fbb262a104889f84358d056e2c,
+        type: 2}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114212434859906248, guid: 196b51fbb262a104889f84358d056e2c,
+        type: 2}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114212434859906248, guid: 196b51fbb262a104889f84358d056e2c,
+        type: 2}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114312900598668380, guid: 196b51fbb262a104889f84358d056e2c,
+        type: 2}
+      propertyPath: m_Text
+      value: ^
+      objectReference: {fileID: 0}
+    - target: {fileID: 114312900598668380, guid: 196b51fbb262a104889f84358d056e2c,
+        type: 2}
+      propertyPath: m_FontData.m_MaxSize
+      value: 51
+      objectReference: {fileID: 0}
+    - target: {fileID: 114659090238989846, guid: 196b51fbb262a104889f84358d056e2c,
+        type: 2}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114659090238989846, guid: 196b51fbb262a104889f84358d056e2c,
+        type: 2}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114659090238989846, guid: 196b51fbb262a104889f84358d056e2c,
+        type: 2}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 196b51fbb262a104889f84358d056e2c, type: 2}
   m_IsPrefabAsset: 0
@@ -3614,7 +3668,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 961346d7e16a445ff93777573e78efd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: ws://52.231.163.176:6969/socket.io/?EIO=4&transport=websocket
+  url: ws://localhost:6969/socket.io/?EIO=4&transport=websocket
   autoConnect: 1
   reconnectDelay: 5
   ackExpirationTime: 1800

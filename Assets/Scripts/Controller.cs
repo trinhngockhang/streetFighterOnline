@@ -40,7 +40,9 @@ public class Controller : MonoBehaviour
         socket.On("OTHERPLAYERCHANGEVELOCITY", onUserChange);
         socket.On("GETID", getMyId);
         socket.On("USER_DISCONNECTED", OnUserDisConnected);
-        socket.On("OTHERPLAYERFIRE", otherPlayerPunch);
+        socket.On("OTHERPLAYER_H_PUNCH", otherPlayerPunch);
+        socket.On("OTHERPLAYER_DOWN", otherPlayerDown);
+        socket.On("OTHERPLAYER_UP", otherPlayerUp);
         // joyStick.gameObject.SetActive(false);
         loginPanel.playBtn.onClick.AddListener(OnClickPlayBtn);
         // joyStick.onCommanMove += OnCommandMove;
@@ -94,7 +96,7 @@ public class Controller : MonoBehaviour
         // otherPlayCom.direct = n;
         // Debug.Log("s ne: " + s.Length);
         otherPlayCom.stopMove();
-        Player2.transform.eulerAngles = new Vector3(0, n, 0);
+        // Player2.transform.eulerAngles = new Vector3(0, n, 0);
         // Debug.Log("name move: "+ obj.data.GetField("name").ToString());
     }
     void onUserChange(SocketIOEvent obj){
@@ -105,9 +107,9 @@ public class Controller : MonoBehaviour
         direct = direct.Remove(direct.Length - 1, 1);
         if (direct == "left"){
             Debug.Log("di chuyen sang trai");
-            otherPlayCom.velocityBack();
+            otherPlayCom.moveBack();
         }else{
-            otherPlayCom.velocityFoward();
+            otherPlayCom.moveFoward();
         }
     }
     void OnClickPlayBtn()
@@ -210,13 +212,35 @@ public class Controller : MonoBehaviour
         data["enemyid"] = idPlayer2;
         data["enemyid"] = data["enemyid"].Remove(0, 1);
         data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
-        socket.Emit("PLAYERFIRE", new JSONObject(data));
+        socket.Emit("PLAYER_H_PUNCH", new JSONObject(data));
     }
-
+    public void moveDown()
+    {
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data["enemyid"] = idPlayer2;
+        data["enemyid"] = data["enemyid"].Remove(0, 1);
+        data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
+        socket.Emit("PLAYER_DOWN", new JSONObject(data));
+    }
+    public void otherPlayerDown(SocketIOEvent obj)
+    {
+        otherPlayCom.moveDown();
+    }
+    public void otherPlayerUp(SocketIOEvent obj)
+    {
+        otherPlayCom.standUp();
+    }
+    public void moveUp()
+    {
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data["enemyid"] = idPlayer2;
+        data["enemyid"] = data["enemyid"].Remove(0, 1);
+        data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
+        socket.Emit("PLAYER_UP", new JSONObject(data));
+    }
     IEnumerator ConnectServer()
     {
         yield return new WaitForSeconds(0.2f);
-       
         socket.Emit("USER_CONNECT");
         yield return new WaitForSeconds(0.2f);
     }

@@ -15,10 +15,11 @@ public class JoyStickController : MonoBehaviour {
     private Rigidbody myBody;
     public bool leftMove;
     public bool rightMove;
-    public bool backMove;
-    public bool frontMove;
+    public bool downMove;
+    public bool upMove;
     public bool punch;
     private bool lastLeft, lastRight, lastUp, lastDown, lastIdle;
+
     void Start()
     {
         // playerObject = new GameObject();
@@ -44,10 +45,10 @@ public class JoyStickController : MonoBehaviour {
                 RightMove(state);
             break;
             case "Down":
-                BackMove(state);
+                DownMove(state);
             break;
-            case "Foward":
-                FrontMove(state);
+            case "Up":
+                UpMove(state);
             break;
         }
         if(unit.name == "Punch"){
@@ -65,13 +66,13 @@ public class JoyStickController : MonoBehaviour {
     {
         rightMove = state;
     }
-    private void BackMove(bool state)
+    private void DownMove(bool state)
     {
-        backMove = state;
+        downMove = state;
     }
-    private void FrontMove(bool state)
+    private void UpMove(bool state)
     {
-        frontMove = state;
+        upMove = state;
     }
     private void PunchAttack(bool state)
     {
@@ -81,6 +82,7 @@ public class JoyStickController : MonoBehaviour {
         lastLeft = false;
         lastRight = false;
         lastUp = false;
+        lastDown = false;
         lastIdle = false;
     }
     private void Update()
@@ -108,16 +110,40 @@ public class JoyStickController : MonoBehaviour {
                 Controller.instance.ChangeVelocity("right");
             }
         }
+        else if (downMove || Input.GetKey("s"))
+        {
+            if (!lastDown)
+            {
+                setAllMoveFalse();
+                lastDown = true;
+                // di chuyen nhan vat
+                player.moveDown();
+                // gui len server
+                Controller.instance.moveDown();
+            }
+        }
+        else if (upMove || Input.GetKey("w"))
+        {
+            if (!lastUp)
+            {
+                setAllMoveFalse();
+                lastUp = true;
+                // di chuyen nhan vat
+                player.standUp();
+                // gui len server
+                Controller.instance.moveUp();
+            }
+        }
         else
         {
-            player.stopMove();
             if (lastLeft || lastRight)
             {
                 Debug.Log("vua di chuyen xong");
+                setAllMoveFalse();
+                player.stopMove();
                 int n = lastLeft ? 180 : 0;
                 player.updatePositionToServer(n);
             }
-            setAllMoveFalse();
         }
 
         if(punch || Input.GetKey("k")){
