@@ -8,6 +8,8 @@ public class Player : MonoBehaviour {
     public string playerName;
     // vi tri
     public Vector2 position;
+    // luong damge 1 hit
+    int damge = 23;
     // id tu server 
     public string id;
     public int direct = 0; // director of tank,1234 up right down left
@@ -80,7 +82,8 @@ public class Player : MonoBehaviour {
     public bool checkAttacking()
     {
         if (m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_H_punch")
-           || m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_M_punch"))
+           || m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_M_punch")
+           || m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_Kick"))
         {
             return true;
         }
@@ -149,9 +152,18 @@ public class Player : MonoBehaviour {
     public void punch(){
         if (!this.checkAttacking())
         {
-            this.animationPunch();
+            // this.animationPunch();
             // gui len server
             Controller.instance.h_punch();
+        }
+    }
+    public void kick()
+    {
+        if (!this.checkAttacking())
+        {
+            // this.animationKick();
+            // gui len server
+            Controller.instance.kick();
         }
     }
     public void animationPunch(){
@@ -159,6 +171,14 @@ public class Player : MonoBehaviour {
             m_Animator.Play("player_H_punch");
         else if (state == 2)
             m_Animator.Play("player_M_punch");
+    }
+    public void animationKick()
+    {
+        //if (state == 1)
+        //    m_Animator.Play("player_H_punch");
+        //else if (state == 2)
+        //m_Animator.Play("player_M_punch");
+        m_Animator.SetTrigger("player_kick");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -178,7 +198,7 @@ public class Player : MonoBehaviour {
         if (!m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_hit"))
         {
             m_Animator.Play("player_hit");
-            this.health -= 10;
+            this.health -= damge;
             HealthImage.transform.localScale = new Vector2(health / 100, 1);
         }
     }

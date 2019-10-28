@@ -9,6 +9,7 @@ public class JoyStickController : MonoBehaviour {
     public WachButton BackWard;
     public WachButton Forward;
     public WachButton Punch;
+    public WachButton Kick;
     public Player player;
     Animator m_Animator;
 
@@ -18,6 +19,7 @@ public class JoyStickController : MonoBehaviour {
     public bool downMove;
     public bool upMove;
     public bool punch;
+    public bool kick;
     private bool lastLeft, lastRight, lastUp, lastDown, lastIdle;
 
     void Start()
@@ -33,6 +35,7 @@ public class JoyStickController : MonoBehaviour {
         BackWard.OnPress += OnPress;
         Forward.OnPress += OnPress;
         Punch.OnPress += OnPress;
+        Kick.OnPress += OnPress;
     }
     void OnPress(GameObject unit,bool state)
     {
@@ -55,7 +58,12 @@ public class JoyStickController : MonoBehaviour {
           //  Debug.Log("da nhan nut dam");
             PunchAttack(state);
         }
-       
+        if (unit.name == "Kick")
+        {
+            //  Debug.Log("da nhan nut dam");
+            KickAttack(state);
+        }
+
     }
 
     private void LeftMove(bool state)
@@ -78,6 +86,10 @@ public class JoyStickController : MonoBehaviour {
     {
         punch = state;
     }
+    private void KickAttack(bool state)
+    {
+        kick = state;
+    }
     private void setAllMoveFalse(){
         lastLeft = false;
         lastRight = false;
@@ -94,7 +106,7 @@ public class JoyStickController : MonoBehaviour {
                 setAllMoveFalse();
                 lastLeft = true;
                 // di chuyen nhan vat
-                player.moveBack();
+                // player.moveBack();
                 // gui len server
                 Controller.instance.ChangeVelocity("left");
             }
@@ -105,7 +117,7 @@ public class JoyStickController : MonoBehaviour {
                 setAllMoveFalse();
                 lastRight = true;
                 // di chuyen nhan vat
-                player.moveFoward();
+                // player.moveFoward();
                 // gui len server
                 Controller.instance.ChangeVelocity("right");
             }
@@ -149,6 +161,10 @@ public class JoyStickController : MonoBehaviour {
         if(punch || Input.GetKey("k")){
             Debug.Log("aaaaaaaaaaa");
             player.punch();
+        }
+        if(kick){
+            Debug.Log("kick roi");
+            player.kick();
         }
     }
 }

@@ -36,11 +36,15 @@ public class Controller : MonoBehaviour
         socket.On("USER_CONNECTED", OnUserConnected);
         socket.On("PLAY", OnUserPlay);
         _makeInstance();
-        socket.On("MOVE", onUserMove);
+        socket.On("UPDATEPOSITION", onUserMove);
+        socket.On("PERMISMOVE", permisMove);
+        socket.On("PERMIS_H_PUNCH", permisHPunch);
+        socket.On("PERMIS_KICK", permisKick);
         socket.On("OTHERPLAYERCHANGEVELOCITY", onUserChange);
         socket.On("GETID", getMyId);
         socket.On("USER_DISCONNECTED", OnUserDisConnected);
         socket.On("OTHERPLAYER_H_PUNCH", otherPlayerPunch);
+        socket.On("OTHERPLAYER_KICK", otherPlayerKick);
         socket.On("OTHERPLAYER_DOWN", otherPlayerDown);
         socket.On("OTHERPLAYER_UP", otherPlayerUp);
         // joyStick.gameObject.SetActive(false);
@@ -70,6 +74,29 @@ public class Controller : MonoBehaviour
         data["id"] = data["id"].Remove(data["id"].Length - 1, 1);
         socket.Emit("CHANGEVELOCITY", new JSONObject(data));
     }
+    public void permisMove(SocketIOEvent obj){
+        string direct = obj.data.GetField("direction").ToString();
+        Debug.Log("Duoc phep di chuyen:" + direct);
+        direct = direct.Remove(0, 1);
+        direct = direct.Remove(direct.Length - 1, 1);
+        if (direct == "left")
+        {
+            Debug.Log("di chuyen sang trai");
+            playerCom.moveBack();
+        }
+        else
+        {
+            playerCom.moveFoward();
+        }
+    }
+    public void permisHPunch(SocketIOEvent obj)
+    {
+        playerCom.animationPunch();
+    }
+    public void permisKick(SocketIOEvent obj)
+    {
+        playerCom.animationKick();
+    }
     public void OnCommandMove(Vector2 vec2,int angle)
     {
         Dictionary<string, string> data = new Dictionary<string, string>();
@@ -79,7 +106,7 @@ public class Controller : MonoBehaviour
         data["id"] = idPlayer2;
         data["id"] = data["id"].Remove(0, 1);
         data["id"] = data["id"].Remove(data["id"].Length - 1, 1);
-        socket.Emit("MOVE", new JSONObject(data));
+        socket.Emit("UPDATEPOSITION", new JSONObject(data));
     }
 
     void onUserMove(SocketIOEvent obj)
@@ -154,6 +181,10 @@ public class Controller : MonoBehaviour
         otherPlayCom.animationPunch();
     }
 
+    private void otherPlayerKick(SocketIOEvent obj)
+    {
+        otherPlayCom.animationKick();
+    }
     private void OnUserConnected(SocketIOEvent evt)
     {
         GameObject otherPlayer;
@@ -213,6 +244,14 @@ public class Controller : MonoBehaviour
         data["enemyid"] = data["enemyid"].Remove(0, 1);
         data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
         socket.Emit("PLAYER_H_PUNCH", new JSONObject(data));
+    }
+    public void kick()
+    {
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data["enemyid"] = idPlayer2;
+        data["enemyid"] = data["enemyid"].Remove(0, 1);
+        data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
+        socket.Emit("PLAYER_KICK", new JSONObject(data));
     }
     public void moveDown()
     {
