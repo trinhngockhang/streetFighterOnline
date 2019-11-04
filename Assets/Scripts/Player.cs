@@ -33,14 +33,15 @@ public class Player : MonoBehaviour {
     private bool firstPlayer;
     // 1 dung,2 ngoi,3 nhay
     public int state = 1;
+    public bool collisionEnter = false;
 
     public float playerY;
 
-    public void test(){
+    public void test() {
         Debug.Log("chay dc ne");
     }
 
-    public void setName(bool first,Text textPlayer1,Text Player2,HealthBar HealthBar1,HealthBar HealthBar2)
+    public void setName(bool first, Text textPlayer1, Text Player2, HealthBar HealthBar1, HealthBar HealthBar2)
     {
         Debug.Log("la ng dau toen : " + first);
         Debug.Log("ten la " + playerName);
@@ -65,7 +66,7 @@ public class Player : MonoBehaviour {
     {
         return health;
     }
-    
+
     private void Start()
     {
         playerY = myBody.position.y;
@@ -77,7 +78,7 @@ public class Player : MonoBehaviour {
 
     void _makeInstance()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
         }
@@ -94,28 +95,28 @@ public class Player : MonoBehaviour {
         return false;
     }
     // sang trai
-    public void moveBack(){
+    public void moveBack() {
         velocityBack();
-        if (state == 1){
+        if (state == 1) {
             m_Animator.ResetTrigger("player_idle");
             m_Animator.SetTrigger("player_move");
         }
     }
     // thay doi van toc de sang trai
-    public void velocityBack(){
+    public void velocityBack() {
         Debug.Log("chay sang ben trai");
         myBody.velocity = new Vector2(-6f, 0);
         this.transform.eulerAngles = new Vector3(0, 180, 0);
         rightLook = false;
     }
     // thay doi van toc de sang phai
-    public void velocityFoward(){
+    public void velocityFoward() {
         myBody.velocity = new Vector2(6f, 0);
         this.transform.eulerAngles = new Vector3(0, 0, 0);
         rightLook = true;
     }
     // sang phai
-    public void moveFoward(){
+    public void moveFoward() {
         velocityFoward();
         if (state == 1)
         {
@@ -124,15 +125,22 @@ public class Player : MonoBehaviour {
         }
     }
     // ngoi xuong
-    public void moveDown(){
+    public void moveDown() {
         m_Animator.ResetTrigger("player_idle");
         m_Animator.SetTrigger("player_sit");
         state = 2;
     }
+
+    // Xet va cham Player va Cube
+    void OnCollisionEnter(Collision other)
+    {
+        Debug.Log("Cham roi");
+        collisionEnter = true;
+    }
     // dung len
     public void standUp()
     {
-
+        
         if (!this.checkAttacking())
         {
             this.animationStandup();
@@ -147,10 +155,12 @@ public class Player : MonoBehaviour {
             state = 1;
         }
         else {
-            if (myBody.position.y == playerY)
+            //if (myBody.position.y < playerY)
+            if (collisionEnter == true)
             {
                 Debug.Log("Nhay len");
                 myBody.AddForce(new Vector3(0, 5, 0) * 90);
+                collisionEnter = false;
             }
         }
     }
@@ -276,10 +286,9 @@ public class Player : MonoBehaviour {
         }
     }
     private void Update()
-    {
-        Debug.Log("velocity:" + myBody.velocity);
+    {   
+        //Debug.Log("velocity:" + myBody.velocity);
         if (!checkAttacking()) attacked = false;
-       
     }
 
 }

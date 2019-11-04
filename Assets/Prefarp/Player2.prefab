@@ -122,6 +122,7 @@ MonoBehaviour:
   fireRate: 0.5
   enoughTime: 1
   state: 1
+  collisionEnter: 0
   playerY: 0
 --- !u!65 &65731325735742414
 BoxCollider:

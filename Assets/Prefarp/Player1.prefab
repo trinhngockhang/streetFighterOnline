@@ -123,6 +123,7 @@ MonoBehaviour:
   fireRate: 0.5
   enoughTime: 1
   state: 1
+  collisionEnter: 0
   playerY: 0
 --- !u!54 &54440478152468172
 Rigidbody:
