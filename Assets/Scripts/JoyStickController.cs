@@ -10,6 +10,8 @@ public class JoyStickController : MonoBehaviour {
     public WachButton Forward;
     public WachButton Punch;
     public WachButton Kick;
+    public WachButton Jump;
+    public WachButton standUp;
     public Player player;
     Animator m_Animator;
 
@@ -20,6 +22,7 @@ public class JoyStickController : MonoBehaviour {
     public bool upMove;
     public bool punch;
     public bool kick;
+    public bool jump;
     private bool lastLeft, lastRight, lastUp, lastDown, lastIdle;
 
     void Start()
@@ -36,6 +39,7 @@ public class JoyStickController : MonoBehaviour {
         Forward.OnPress += OnPress;
         Punch.OnPress += OnPress;
         Kick.OnPress += OnPress;
+        Jump.OnPress += OnPress;
     }
     void OnPress(GameObject unit,bool state)
     {
@@ -63,7 +67,11 @@ public class JoyStickController : MonoBehaviour {
             //  Debug.Log("da nhan nut dam");
             KickAttack(state);
         }
-
+        if (unit.name == "Jump")
+        {
+            //  Debug.Log("da nhan nut dam");
+            Jumping(state);
+        }
     }
 
     private void LeftMove(bool state)
@@ -89,6 +97,10 @@ public class JoyStickController : MonoBehaviour {
     private void KickAttack(bool state)
     {
         kick = state;
+    }
+    private void Jumping(bool state)
+    {
+        jump = state;
     }
     private void setAllMoveFalse(){
         lastLeft = false;
@@ -148,10 +160,10 @@ public class JoyStickController : MonoBehaviour {
         }
         else
         {
+            setAllMoveFalse();
             if (lastLeft || lastRight)
             {
                 Debug.Log("vua di chuyen xong");
-                setAllMoveFalse();
                 player.stopMove();
                 int n = lastLeft ? 180 : 0;
                 player.updatePositionToServer(n);
@@ -165,6 +177,15 @@ public class JoyStickController : MonoBehaviour {
         if(kick){
             Debug.Log("kick roi");
             player.kick();
+        }
+        if (jump) {
+            Debug.Log("Jump");
+            player.jump();
+        }
+        if (standUp)
+        {
+            Debug.Log("Nhay");
+            player.standUp();
         }
     }
 }

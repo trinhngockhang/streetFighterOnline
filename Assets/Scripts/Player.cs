@@ -33,6 +33,9 @@ public class Player : MonoBehaviour {
     private bool firstPlayer;
     // 1 dung,2 ngoi,3 nhay
     public int state = 1;
+
+    public float playerY;
+
     public void test(){
         Debug.Log("chay dc ne");
     }
@@ -65,6 +68,7 @@ public class Player : MonoBehaviour {
     
     private void Start()
     {
+        playerY = myBody.position.y;
         firstPlayer = true;
         m_Animator = this.GetComponent<Animator>();
         this.name = playerName;
@@ -128,9 +132,27 @@ public class Player : MonoBehaviour {
     // dung len
     public void standUp()
     {
-        m_Animator.ResetTrigger("player_sit");
-        m_Animator.SetTrigger("player_idle");
-        state = 1;
+
+        if (!this.checkAttacking())
+        {
+            this.animationStandup();
+            // gui len server
+            //Controller.instance.jump();
+        }
+
+        if (state == 2)
+        {
+            m_Animator.ResetTrigger("player_sit");
+            m_Animator.SetTrigger("player_idle");
+            state = 1;
+        }
+        else {
+            if (myBody.position.y == playerY)
+            {
+                Debug.Log("Nhay len");
+                myBody.AddForce(new Vector3(0, 5, 0) * 90);
+            }
+        }
     }
 
     public void updatePositionToServer(int n){
@@ -166,6 +188,17 @@ public class Player : MonoBehaviour {
             Controller.instance.kick();
         }
     }
+
+    public void jump()
+    {
+        if (!this.checkAttacking())
+        {
+            this.animationJump();
+            // gui len server
+            //Controller.instance.jump();
+        }
+    }
+
     public void animationPunch(){
         if (state == 1)
             m_Animator.Play("player_H_punch");
@@ -179,6 +212,23 @@ public class Player : MonoBehaviour {
         //else if (state == 2)
         //m_Animator.Play("player_M_punch");
         m_Animator.SetTrigger("player_kick");
+    }
+    public void animationJump()
+    {
+        //if (state == 1)
+        //    m_Animator.Play("player_H_punch");
+        //else if (state == 2)
+        //m_Animator.Play("player_M_punch");
+        m_Animator.SetTrigger("player_jumping");
+    }
+
+    public void animationStandup()
+    {
+        //if (state == 1)
+        //    m_Animator.Play("player_H_punch");
+        //else if (state == 2)
+        //m_Animator.Play("player_M_punch");
+        m_Animator.SetTrigger("player_jumping");
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

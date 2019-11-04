@@ -45,8 +45,10 @@ public class Controller : MonoBehaviour
         socket.On("USER_DISCONNECTED", OnUserDisConnected);
         socket.On("OTHERPLAYER_H_PUNCH", otherPlayerPunch);
         socket.On("OTHERPLAYER_KICK", otherPlayerKick);
+        socket.On("OTHERPLAYER_JUMP",otherPlayerJump);
         socket.On("OTHERPLAYER_DOWN", otherPlayerDown);
         socket.On("OTHERPLAYER_UP", otherPlayerUp);
+        
         // joyStick.gameObject.SetActive(false);
         loginPanel.playBtn.onClick.AddListener(OnClickPlayBtn);
         // joyStick.onCommanMove += OnCommandMove;
@@ -96,6 +98,10 @@ public class Controller : MonoBehaviour
     public void permisKick(SocketIOEvent obj)
     {
         playerCom.animationKick();
+    }
+    public void permisJump(SocketIOEvent obj)
+    {
+        playerCom.animationJump();
     }
     public void OnCommandMove(Vector2 vec2,int angle)
     {
@@ -185,6 +191,10 @@ public class Controller : MonoBehaviour
     {
         otherPlayCom.animationKick();
     }
+    private void otherPlayerJump(SocketIOEvent obj)
+    {
+        otherPlayCom.animationJump();
+    }
     private void OnUserConnected(SocketIOEvent evt)
     {
         GameObject otherPlayer;
@@ -252,6 +262,14 @@ public class Controller : MonoBehaviour
         data["enemyid"] = data["enemyid"].Remove(0, 1);
         data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
         socket.Emit("PLAYER_KICK", new JSONObject(data));
+    }
+    public void jump()
+    {
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data["enemyid"] = idPlayer2;
+        data["enemyid"] = data["enemyid"].Remove(0, 1);
+        data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
+        socket.Emit("PLAYER_JUMP", new JSONObject(data));
     }
     public void moveDown()
     {
