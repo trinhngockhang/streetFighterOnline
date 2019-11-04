@@ -22,7 +22,7 @@ public class jumpController : MonoBehaviour
         //r.AddForce(Vector3.forward);
         if (r.position.y > -2.06)
         {
-            r.AddForce(Physics.gravity);1
+            r.AddForce(Physics.gravity);
             r.drag = 1;
         }
         else

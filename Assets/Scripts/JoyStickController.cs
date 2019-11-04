@@ -10,8 +10,6 @@ public class JoyStickController : MonoBehaviour {
     public WachButton Forward;
     public WachButton Punch;
     public WachButton Kick;
-    public WachButton Jump;
-    public WachButton standUp;
     public Player player;
     Animator m_Animator;
 
@@ -39,7 +37,6 @@ public class JoyStickController : MonoBehaviour {
         Forward.OnPress += OnPress;
         Punch.OnPress += OnPress;
         Kick.OnPress += OnPress;
-        Jump.OnPress += OnPress;
     }
     void OnPress(GameObject unit,bool state)
     {
@@ -66,11 +63,6 @@ public class JoyStickController : MonoBehaviour {
         {
             //  Debug.Log("da nhan nut dam");
             KickAttack(state);
-        }
-        if (unit.name == "Jump")
-        {
-            //  Debug.Log("da nhan nut dam");
-            Jumping(state);
         }
     }
 
@@ -160,13 +152,17 @@ public class JoyStickController : MonoBehaviour {
         }
         else
         {
-            setAllMoveFalse();
+
             if (lastLeft || lastRight)
             {
+                setAllMoveFalse();
                 Debug.Log("vua di chuyen xong");
                 player.stopMove();
                 int n = lastLeft ? 180 : 0;
                 player.updatePositionToServer(n);
+            }
+            if(lastUp || lastDown){
+                setAllMoveFalse();
             }
         }
 
@@ -177,15 +173,6 @@ public class JoyStickController : MonoBehaviour {
         if(kick){
             Debug.Log("kick roi");
             player.kick();
-        }
-        if (jump) {
-            Debug.Log("Jump");
-            player.jump();
-        }
-        if (standUp)
-        {
-            Debug.Log("Nhay");
-            player.standUp();
         }
     }
 }

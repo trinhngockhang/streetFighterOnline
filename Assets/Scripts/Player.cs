@@ -233,6 +233,7 @@ public class Player : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log("va cham voi thang loz cuce");
     }
 
 
@@ -276,7 +277,9 @@ public class Player : MonoBehaviour {
     }
     private void Update()
     {
+        Debug.Log("velocity:" + myBody.velocity);
         if (!checkAttacking()) attacked = false;
+       
     }
 
 }
