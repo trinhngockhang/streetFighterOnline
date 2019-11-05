@@ -217,6 +217,7 @@ public class Controller : MonoBehaviour
         otherPlayCom.setName(!firstPlayerinRoom, textNamePlayer1, textNamePlayer2,HealthBar1,HealthBar2);
         Player2 = otherPlayer;
         Debug.Log("position Player2 : " + Player2.transform.position);
+
     }
     private void OnUserPlay(SocketIOEvent evt)
     {

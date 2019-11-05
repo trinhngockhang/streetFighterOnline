@@ -10,6 +10,7 @@ TagManager:
   - normalBulletReady
   - redBrick
   - grayBrick
+  - Ground
   layers:
   - Default
   - TransparentFX

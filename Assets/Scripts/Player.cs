@@ -36,6 +36,9 @@ public class Player : MonoBehaviour {
     public bool collisionEnter = false;
 
     public float playerY;
+    private Collision otherPlayerCollision;
+
+    private bool collisionPlayer = false;
 
     public void test() {
         Debug.Log("chay dc ne");
@@ -131,12 +134,7 @@ public class Player : MonoBehaviour {
         state = 2;
     }
 
-    // Xet va cham Player va Cube
-    void OnCollisionEnter(Collision other)
-    {
-        Debug.Log("Cham roi");
-        collisionEnter = true;
-    }
+   
     // dung len
     public void standUp()
     {
@@ -241,12 +239,6 @@ public class Player : MonoBehaviour {
         m_Animator.SetTrigger("player_jumping");
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        Debug.Log("va cham voi thang loz cuce");
-    }
-
-
     public void beFirebyNormalBulletEnemy()
     {      
     }
@@ -267,7 +259,49 @@ public class Player : MonoBehaviour {
     {
         
     }
-    private void OnTriggerStay(Collider collision)
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.collider.tag == "Player"){
+            collisionPlayer = true;
+            otherPlayerCollision = collision;
+            myBody.velocity = new Vector2(0, 0);
+        }
+        else if(collision.collider.tag == "Ground"){
+            collisionEnter = true;
+        }
+        // myBody.velocity = new Vector2(0, 0);
+        Debug.Log("bat dau cham");
+    }
+    private void OnCollisionExit(Collision collision)
+    {
+        if(collision.collider.tag == "Player"){
+            collisionPlayer = false;
+        }
+        // myBody.velocity = new Vector2(0, 0);
+        Debug.Log("het va cham");
+    }
+
+    private void playerColl(Collision collision){
+        float positionPlayerX = this.transform.position.x;
+        float positionEnemyX = collision.transform.position.x;
+        Debug.Log("Danh trung r,dm");
+        Debug.Log(positionEnemyX + " " + positionPlayerX + " " + attacked);
+        // neu o ben phai va dang nhin sang phai
+        if ((positionEnemyX > positionPlayerX && rightLook) || (positionEnemyX < positionPlayerX && !rightLook))
+        {
+            Player player2 = collision.gameObject.GetComponent<Player>();
+            if ((m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_H_punch")
+              || m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_M_punch"))
+              && !attacked)
+            {
+                Debug.Log("dam trung r");
+                player2.hit();
+                attacked = true;
+            }
+        }
+    }
+
+    private void onCollisionStay(Collision collision)
     {
         float positionPlayerX = this.transform.position.x;
         float positionEnemyX = collision.transform.position.x;
@@ -280,15 +314,22 @@ public class Player : MonoBehaviour {
               || m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_M_punch")) 
               && !attacked)
             {
+                Debug.Log("dam trung r");
                 player2.hit();
                 attacked = true;
             }
         }
     }
+
     private void Update()
     {   
         //Debug.Log("velocity:" + myBody.velocity);
         if (!checkAttacking()) attacked = false;
     }
-
+    private void FixedUpdate()
+    {
+        if(collisionPlayer){
+            playerColl(otherPlayerCollision);
+        }
+    }
 }

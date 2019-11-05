@@ -110,7 +110,7 @@ public class JoyStickController : MonoBehaviour {
                 setAllMoveFalse();
                 lastLeft = true;
                 // di chuyen nhan vat
-                // player.moveBack();
+                //player.moveBack();
                 // gui len server
                 Controller.instance.ChangeVelocity("left");
             }
@@ -121,7 +121,7 @@ public class JoyStickController : MonoBehaviour {
                 setAllMoveFalse();
                 lastRight = true;
                 // di chuyen nhan vat
-                // player.moveFoward();
+               //  player.moveFoward();
                 // gui len server
                 Controller.instance.ChangeVelocity("right");
             }
