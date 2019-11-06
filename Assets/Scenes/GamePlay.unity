@@ -458,7 +458,7 @@ Transform:
   m_GameObject: {fileID: 205025556}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.014, y: -5.05, z: -0.062495105}
-  m_LocalScale: {x: 16.026312, y: 1, z: 1}
+  m_LocalScale: {x: 31.82, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 8
@@ -2118,7 +2118,7 @@ PrefabInstance:
     - target: {fileID: 114841248202830826, guid: 0020fa647f232b44f8e0508702e07e04,
         type: 2}
       propertyPath: url
-      value: ws://localhost:6969/socket.io/?EIO=4&transport=websocket
+      value: ws://13.76.152.73:6969/socket.io/?EIO=4&transport=websocket
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0020fa647f232b44f8e0508702e07e04, type: 2}
@@ -4362,7 +4362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 961346d7e16a445ff93777573e78efd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: ws://localhost:6969/socket.io/?EIO=4&transport=websocket
+  url: ws://13.76.152.73:6969/socket.io/?EIO=4&transport=websocket
   autoConnect: 1
   reconnectDelay: 5
   ackExpirationTime: 1800

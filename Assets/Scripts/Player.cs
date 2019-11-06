@@ -9,7 +9,7 @@ public class Player : MonoBehaviour {
     // vi tri
     public Vector2 position;
     // luong damge 1 hit
-    int damge = 23;
+    int damge = 10;
     // id tu server 
     public string id;
     public int direct = 0; // director of tank,1234 up right down left
@@ -76,6 +76,7 @@ public class Player : MonoBehaviour {
         firstPlayer = true;
         m_Animator = this.GetComponent<Animator>();
         this.name = playerName;
+        Physics.gravity = new Vector3(0, -15F, 0);
         _makeInstance();
     }
 
@@ -138,14 +139,6 @@ public class Player : MonoBehaviour {
     // dung len
     public void standUp()
     {
-        
-        if (!this.checkAttacking())
-        {
-            this.animationStandup();
-            // gui len server
-            //Controller.instance.jump();
-        }
-
         if (state == 2)
         {
             m_Animator.ResetTrigger("player_sit");
@@ -154,10 +147,12 @@ public class Player : MonoBehaviour {
         }
         else {
             //if (myBody.position.y < playerY)
-            if (collisionEnter == true)
+            if (collisionEnter == true && !this.checkAttacking())
             {
                 Debug.Log("Nhay len");
-                myBody.AddForce(new Vector3(0, 5, 0) * 90);
+                myBody.AddForce(new Vector3(0, 5, 0) * 100);
+                state = 3;
+                this.animationStandup();
                 collisionEnter = false;
             }
         }
@@ -208,7 +203,7 @@ public class Player : MonoBehaviour {
     }
 
     public void animationPunch(){
-        if (state == 1)
+        if (state == 1 || state == 3)
             m_Animator.Play("player_H_punch");
         else if (state == 2)
             m_Animator.Play("player_M_punch");
@@ -268,6 +263,7 @@ public class Player : MonoBehaviour {
         }
         else if(collision.collider.tag == "Ground"){
             collisionEnter = true;
+            state = 1;
         }
         // myBody.velocity = new Vector2(0, 0);
         Debug.Log("bat dau cham");
@@ -311,7 +307,8 @@ public class Player : MonoBehaviour {
         {
             Player player2 = collision.gameObject.GetComponent<Player>();
             if ((m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_H_punch")
-              || m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_M_punch")) 
+              || m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_M_punch")
+                 || m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_Kick") )
               && !attacked)
             {
                 Debug.Log("dam trung r");
