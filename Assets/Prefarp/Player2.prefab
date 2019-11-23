@@ -124,6 +124,7 @@ MonoBehaviour:
   state: 1
   collisionEnter: 0
   playerY: 0
+  playerTest: {fileID: 0}
 --- !u!65 &65731325735742414
 BoxCollider:
   m_ObjectHideFlags: 0

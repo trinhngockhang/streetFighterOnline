@@ -1849,7 +1849,7 @@ GameObject:
   - component: {fileID: 762631929}
   - component: {fileID: 762631928}
   m_Layer: 0
-  m_Name: Jump
+  m_Name: Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2118,7 +2118,7 @@ PrefabInstance:
     - target: {fileID: 114841248202830826, guid: 0020fa647f232b44f8e0508702e07e04,
         type: 2}
       propertyPath: url
-      value: ws://13.76.152.73:6969/socket.io/?EIO=4&transport=websocket
+      value: ws://localhost:6969/socket.io/?EIO=4&transport=websocket
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0020fa647f232b44f8e0508702e07e04, type: 2}
@@ -2190,9 +2190,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'J
-
-'
+  m_Text: B
 --- !u!222 &845643527
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2886,9 +2884,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: SetTrigger
-        m_Mode: 5
+      - m_Target: {fileID: 666987007}
+        m_MethodName: Hello
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4037,6 +4035,11 @@ PrefabInstance:
       propertyPath: Jump
       value: 
       objectReference: {fileID: 762631929}
+    - target: {fileID: 114417625809287558, guid: 196b51fbb262a104889f84358d056e2c,
+        type: 3}
+      propertyPath: Block
+      value: 
+      objectReference: {fileID: 762631929}
     - target: {fileID: 114587563681579542, guid: 196b51fbb262a104889f84358d056e2c,
         type: 3}
       propertyPath: m_Color.r
@@ -4362,7 +4365,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 961346d7e16a445ff93777573e78efd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: ws://13.76.152.73:6969/socket.io/?EIO=4&transport=websocket
+  url: ws://localhost:6969/socket.io/?EIO=4&transport=websocket
   autoConnect: 1
   reconnectDelay: 5
   ackExpirationTime: 1800

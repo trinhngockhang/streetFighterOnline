@@ -33,7 +33,7 @@ public class WinController : MonoBehaviour {
         data["gaming"] = "false";
         socket.Emit("CHANGESTATUS", new JSONObject(data));
         winpanel.gameObject.SetActive(false);
-        Debug.Log("Delete all" + Time.time);
+        //Debug.Log("Delete all" + Time.time);
     }
 
 	void Update () {
@@ -42,13 +42,13 @@ public class WinController : MonoBehaviour {
             if ((Controller.instance.playerCom.getHealth() <= 0))
             {
 
-                Debug.Log("still" + Time.time);
+                //Debug.Log("still" + Time.time);
                 winpanel.gameObject.SetActive(true);
                 textWin.text = "You Lose!";
             }
             else if (Controller.instance.otherPlayCom.getHealth() <= 0)
             {
-                Debug.Log("still" + Time.time);
+                //Debug.Log("still" + Time.time);
                 winpanel.gameObject.SetActive(true);
                 textWin.text = "You Win!";
             }

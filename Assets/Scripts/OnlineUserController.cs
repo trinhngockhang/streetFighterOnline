@@ -34,7 +34,7 @@ public class OnlineUserController : MonoBehaviour {
     void otherPlayerOk(SocketIOEvent data)
     {
         Controller.instance.gaming = true;
-        Debug.Log("thang kia dong y r");
+        //Debug.Log("thang kia dong y r");
         infoPanel.gameObject.SetActive(true);
         fightPanel.gameObject.SetActive(false);
         onlineUser.gameObject.SetActive(false);
@@ -46,7 +46,7 @@ public class OnlineUserController : MonoBehaviour {
         dataSend["enemyid"] = Controller.instance.idPlayer2;
         dataSend["enemyid"] = dataSend["enemyid"].Remove(0, 1);
         dataSend["enemyid"] = dataSend["enemyid"].Remove(dataSend["enemyid"].Length - 1, 1);
-        Debug.Log("id enemy gui len: " + dataSend["enemyid"]);
+        //Debug.Log("id enemy gui len: " + dataSend["enemyid"]);
         socket.Emit("PLAY", new JSONObject(dataSend));
     }
 
@@ -56,9 +56,9 @@ public class OnlineUserController : MonoBehaviour {
         Controller.instance.idPlayer2 = data.data.GetField("enemyid").ToString();
         Text[] newText;
         newText = fightPanel.GetComponentsInChildren<Text>();
-        Debug.Log("vao day");
+        //Debug.Log("vao day");
         fightPanel.gameObject.SetActive(true);
-        Debug.Log(data);
+        //Debug.Log(data);
         newText[0].text = data.data.GetField("name").ToString();
     }
 
@@ -85,7 +85,7 @@ public class OnlineUserController : MonoBehaviour {
                 // delete old list
                 if (i - 1 < lastOnline)
                 {
-                    Debug.Log("xoa thang " + onlineUser.transform.GetChild(0).GetChild(i - 1 ).name);
+                    //Debug.Log("xoa thang " + onlineUser.transform.GetChild(0).GetChild(i - 1 ).name);
                     Destroy((onlineUser.transform.GetChild(0).GetChild(i -1 ).gameObject));
                 }
                 // Debug.Log("clear" + object.Equals(onlineUser.transform.GetChild(0).GetChild(i - 1)));
@@ -98,15 +98,15 @@ public class OnlineUserController : MonoBehaviour {
                     string s = data.data.GetField("client")[i - 1].GetField("name").ToString();
                     idEnemy = data.data.GetField("client")[i - 1].GetField("id").ToString();
                     string gaming = data.data.GetField("client")[i - 1].GetField("gaming").ToString();
-                    Debug.Log("aaa" + gaming);
+                    //Debug.Log("aaa" + gaming);
                     gaming = gaming.Remove(0, 1);
                     gaming = gaming.Remove(gaming.Length - 1, 1);
                     bool gamingBool = (gaming == "true");
-                    Debug.Log("thang" + s + " " + gamingBool);
+                    //Debug.Log("thang" + s + " " + gamingBool);
                     ButtonFight fightButton = user1.GetComponentInChildren(typeof(ButtonFight)) as ButtonFight;
                     if (gamingBool)
                     {
-                        Debug.Log("gaming la dung");
+                        //Debug.Log("gaming la dung");
                         Destroy(fightButton.gameObject);                       
                     }
                     else
@@ -121,7 +121,7 @@ public class OnlineUserController : MonoBehaviour {
                 }
             }
             lastOnline = n;
-            Debug.Log(lastOnline);
+            //Debug.Log(lastOnline);
         }       
     }
 
@@ -159,9 +159,9 @@ public class OnlineUserController : MonoBehaviour {
         rq["myid"] = rq["myid"].Remove(0, 1);
         rq["myid"] = rq["myid"].Remove(rq["myid"].Length - 1, 1);
         rq["name"] = nameUser;
-        Debug.Log("enemyid ne: " + rq["enemyid"]);
-        Debug.Log("myid ne: " + rq["myid"]);
-        Debug.Log("name ne: " + rq["name"]);
+        //Debug.Log("enemyid ne: " + rq["enemyid"]);
+        //Debug.Log("myid ne: " + rq["myid"]);
+        //Debug.Log("name ne: " + rq["name"]);
         socket.Emit("SENDREQUEST", new JSONObject(rq));
     }
 

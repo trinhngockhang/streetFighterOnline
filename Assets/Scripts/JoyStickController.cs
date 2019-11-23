@@ -10,6 +10,7 @@ public class JoyStickController : MonoBehaviour {
     public WachButton Forward;
     public WachButton Punch;
     public WachButton Kick;
+    public WachButton Block;
     public Player player;
     Animator m_Animator;
 
@@ -21,7 +22,11 @@ public class JoyStickController : MonoBehaviour {
     public bool punch;
     public bool kick;
     public bool jump;
+    public bool block;
     private bool lastLeft, lastRight, lastUp, lastDown, lastIdle;
+
+    //bien i dung de xac dinh da an nut Block hay chua
+    int i = 0;
 
     void Start()
     {
@@ -37,6 +42,7 @@ public class JoyStickController : MonoBehaviour {
         Forward.OnPress += OnPress;
         Punch.OnPress += OnPress;
         Kick.OnPress += OnPress;
+        Block.OnPress += OnPress;
     }
     void OnPress(GameObject unit,bool state)
     {
@@ -63,6 +69,11 @@ public class JoyStickController : MonoBehaviour {
         {
             //  Debug.Log("da nhan nut dam");
             KickAttack(state);
+        }
+        if (unit.name == "Block")
+        {
+            //  Debug.Log("da nhan nut dam");
+            Blocking(state);
         }
     }
 
@@ -94,6 +105,10 @@ public class JoyStickController : MonoBehaviour {
     {
         jump = state;
     }
+    private void Blocking(bool state)
+    {
+        block = state;
+    }
     private void setAllMoveFalse(){
         lastLeft = false;
         lastRight = false;
@@ -101,12 +116,17 @@ public class JoyStickController : MonoBehaviour {
         lastDown = false;
         lastIdle = false;
     }
+
+    public void Hello() {
+        //player.kick();
+    }
+
     private void Update()
     {
         if (leftMove || Input.GetKey("a"))
         {
-         //   Debug.Log("chuan bi update LEft" + lastLeft);
-            if(!lastLeft){
+            //   Debug.Log("chuan bi update LEft" + lastLeft);
+            if (!lastLeft) {
                 setAllMoveFalse();
                 lastLeft = true;
                 // di chuyen nhan vat
@@ -117,11 +137,11 @@ public class JoyStickController : MonoBehaviour {
         }
         else if (rightMove || Input.GetKey("d"))
         {
-            if(!lastRight){
+            if (!lastRight) {
                 setAllMoveFalse();
                 lastRight = true;
                 // di chuyen nhan vat
-               //  player.moveFoward();
+                //  player.moveFoward();
                 // gui len server
                 Controller.instance.ChangeVelocity("right");
             }
@@ -156,23 +176,40 @@ public class JoyStickController : MonoBehaviour {
             if (lastLeft || lastRight)
             {
                 setAllMoveFalse();
-                Debug.Log("vua di chuyen xong");
+                //Debug.Log("vua di chuyen xong");
                 player.stopMove();
                 int n = lastLeft ? 180 : 0;
                 player.updatePositionToServer(n);
             }
-            if(lastUp || lastDown){
+            if (lastUp || lastDown) {
                 setAllMoveFalse();
             }
         }
 
-        if(punch || Input.GetKey("k")){
-            Debug.Log("aaaaaaaaaaa");
+        if (punch || Input.GetKey("k")) {
+            //Debug.Log("aaaaaaaaaaa");
             player.punch();
         }
-        if(kick){
-            Debug.Log("kick roi");
+
+        if (kick || Input.GetKey("l"))
+        {
+            //Debug.Log("kick roi");
             player.kick();
+        }
+
+        if (block)
+        {
+            player.block();
+            i = 1;
+        }
+        else {
+            //player.animationIdle();
+            // Dung bien i: chi sau khi action Block thi moi tro ve idle
+            if (i == 1)
+            {
+                player.idle();
+                i = 0;
+            }
         }
     }
 }

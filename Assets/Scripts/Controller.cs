@@ -40,12 +40,19 @@ public class Controller : MonoBehaviour
         socket.On("PERMISMOVE", permisMove);
         socket.On("PERMIS_H_PUNCH", permisHPunch);
         socket.On("PERMIS_KICK", permisKick);
+        socket.On("PERMIS_JUMP", permisJump);
+        socket.On("PERMIS_BLOCK", permisBlock);
+        socket.On("PERMIS_IDLE", permisIdle);
+        socket.On("PERMIS_ATTACK", permisAttack);
         socket.On("OTHERPLAYERCHANGEVELOCITY", onUserChange);
         socket.On("GETID", getMyId);
         socket.On("USER_DISCONNECTED", OnUserDisConnected);
         socket.On("OTHERPLAYER_H_PUNCH", otherPlayerPunch);
         socket.On("OTHERPLAYER_KICK", otherPlayerKick);
+        socket.On("OTHERPLAYER_ATTACK", otherPlayerAttack);
         socket.On("OTHERPLAYER_JUMP",otherPlayerJump);
+        socket.On("OTHERPLAYER_BLOCK", otherPlayerBlock);
+        socket.On("OTHERPLAYER_IDLE", otherPlayerIdle);
         socket.On("OTHERPLAYER_DOWN", otherPlayerDown);
         socket.On("OTHERPLAYER_UP", otherPlayerUp);
         
@@ -62,13 +69,13 @@ public class Controller : MonoBehaviour
     }
     void getMyId(SocketIOEvent obj)
     {
-        Debug.Log(obj);
+        //Debug.Log(obj);
         string s = obj.data.GetField("id").ToString();
         myId = s;
-        Debug.Log("id tu server nay: " + s);
+        //Debug.Log("id tu server nay: " + s);
     }
     public void ChangeVelocity(string direct){
-        Debug.Log("doi van toc len server");
+        //Debug.Log("doi van toc len server");
         Dictionary<string, string> data = new Dictionary<string, string>();
         data["direction"] = direct;
         data["id"] = idPlayer2;
@@ -78,12 +85,12 @@ public class Controller : MonoBehaviour
     }
     public void permisMove(SocketIOEvent obj){
         string direct = obj.data.GetField("direction").ToString();
-        Debug.Log("Duoc phep di chuyen:" + direct);
+        //Debug.Log("Duoc phep di chuyen:" + direct);
         direct = direct.Remove(0, 1);
         direct = direct.Remove(direct.Length - 1, 1);
         if (direct == "left")
         {
-            Debug.Log("di chuyen sang trai");
+            //Debug.Log("di chuyen sang trai");
             playerCom.moveBack();
         }
         else
@@ -98,11 +105,30 @@ public class Controller : MonoBehaviour
     public void permisKick(SocketIOEvent obj)
     {
         playerCom.animationKick();
+        Debug.Log("KICK KICK KICK");
+    }
+    public void permisAttack(SocketIOEvent obj)
+    {
+        Debug.Log("DANH thang kia");
+        Player.instance.playerTest = otherPlayCom;
+        Player.instance.playerTest.hit();
+        //Debug.Log("Server dang xu ly tren Player: " + Player.instance.playerTest);
+        //Debug.Log("Hai player la: " + playerCom + " " + otherPlayCom) ;
     }
     public void permisJump(SocketIOEvent obj)
     {
         playerCom.animationJump();
     }
+    public void permisBlock(SocketIOEvent obj)
+    {
+        playerCom.animationBlock();
+    }
+
+    public void permisIdle(SocketIOEvent obj)
+    {
+        playerCom.animationIdle();
+    }
+
     public void OnCommandMove(Vector2 vec2,int angle)
     {
         Dictionary<string, string> data = new Dictionary<string, string>();
@@ -133,13 +159,13 @@ public class Controller : MonoBehaviour
         // Debug.Log("name move: "+ obj.data.GetField("name").ToString());
     }
     void onUserChange(SocketIOEvent obj){
-        Debug.Log("Thay doi van toc thanh: " + obj);
+        //Debug.Log("Thay doi van toc thanh: " + obj);
         string direct = obj.data.GetField("direction").ToString();
-        Debug.Log("phia nhan duoc la" + direct);
+        //Debug.Log("phia nhan duoc la" + direct);
         direct = direct.Remove(0, 1);
         direct = direct.Remove(direct.Length - 1, 1);
         if (direct == "left"){
-            Debug.Log("di chuyen sang trai");
+            //Debug.Log("di chuyen sang trai");
             otherPlayCom.moveBack();
         }else{
             otherPlayCom.moveFoward();
@@ -149,7 +175,7 @@ public class Controller : MonoBehaviour
     {
         if(loginPanel.inputField.text != "")
         {
-            Debug.Log("da nhan button");
+            //Debug.Log("da nhan button");
             Dictionary<string, string> data = new Dictionary<string, string>();
             data["name"] = loginPanel.inputField.text;
             namePlayer = loginPanel.inputField.text;
@@ -191,10 +217,25 @@ public class Controller : MonoBehaviour
     {
         otherPlayCom.animationKick();
     }
+    private void otherPlayerAttack(SocketIOEvent obj)
+    {
+        Debug.Log("BI DANH");
+        Player.instance.playerTest = playerCom;
+        Player.instance.playerTest.hit();
+    }
     private void otherPlayerJump(SocketIOEvent obj)
     {
         otherPlayCom.animationJump();
     }
+    private void otherPlayerBlock(SocketIOEvent obj)
+    {
+        otherPlayCom.animationBlock();
+    }
+    private void otherPlayerIdle(SocketIOEvent obj)
+    {
+        otherPlayCom.animationIdle();
+    }
+
     private void OnUserConnected(SocketIOEvent evt)
     {
         GameObject otherPlayer;
@@ -208,7 +249,7 @@ public class Controller : MonoBehaviour
             temp = spawnPositionFirst;
             otherPlayer = GameObject.Instantiate(playGameobjFirst.gameObject, temp, Quaternion.identity) as GameObject;
         }
-        Debug.Log("GEt the message server: " + evt + "user connected") ;
+        //Debug.Log("GEt the message server: " + evt + "user connected") ;
 
         otherPlayCom = otherPlayer.GetComponent<Player>();
         otherPlayCom.playerName = JsonToString(evt.data.GetField("name").ToString(), "\"");
@@ -216,7 +257,7 @@ public class Controller : MonoBehaviour
         // otherPlayCom.id = JsonToString(evt.data.GetField("id").ToString(), "\"");
         otherPlayCom.setName(!firstPlayerinRoom, textNamePlayer1, textNamePlayer2,HealthBar1,HealthBar2);
         Player2 = otherPlayer;
-        Debug.Log("position Player2 : " + Player2.transform.position);
+        //Debug.Log("position Player2 : " + Player2.transform.position);
 
     }
     private void OnUserPlay(SocketIOEvent evt)
@@ -235,11 +276,11 @@ public class Controller : MonoBehaviour
             temp = spawnPositionFirst;
             player = GameObject.Instantiate(playGameobjFirst.gameObject, temp, Quaternion.identity) as GameObject;
         }
-        Debug.Log("GEt the message server: " + evt + "userplay");
+        //Debug.Log("GEt the message server: " + evt + "userplay");
         Map.gameObject.SetActive(true);
         bg.gameObject.SetActive(false);
         loginPanel.gameObject.SetActive(false);
-        Debug.Log("chuan bi active joystick");
+        //Debug.Log("chuan bi active joystick");
         joyStick.gameObject.SetActive(true);
         joyStick.ActionJoystick();
         playerCom = player.GetComponent<Player>();
@@ -264,6 +305,14 @@ public class Controller : MonoBehaviour
         data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
         socket.Emit("PLAYER_KICK", new JSONObject(data));
     }
+    public void attack()
+    {
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data["enemyid"] = idPlayer2;
+        data["enemyid"] = data["enemyid"].Remove(0, 1);
+        data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
+        socket.Emit("PLAYER_ATTACK", new JSONObject(data));
+    }
     public void jump()
     {
         Dictionary<string, string> data = new Dictionary<string, string>();
@@ -272,6 +321,25 @@ public class Controller : MonoBehaviour
         data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
         socket.Emit("PLAYER_JUMP", new JSONObject(data));
     }
+
+    public void block()
+    {
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data["enemyid"] = idPlayer2;
+        data["enemyid"] = data["enemyid"].Remove(0, 1);
+        data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
+        socket.Emit("PLAYER_BLOCK", new JSONObject(data));
+    }
+
+    public void idle()
+    {
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data["enemyid"] = idPlayer2;
+        data["enemyid"] = data["enemyid"].Remove(0, 1);
+        data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
+        socket.Emit("PLAYER_IDLE", new JSONObject(data));
+    }
+
     public void moveDown()
     {
         Dictionary<string, string> data = new Dictionary<string, string>();

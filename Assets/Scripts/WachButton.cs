@@ -13,7 +13,7 @@ public class WachButton : MonoBehaviour {
 
     void Start()
     {
-        Debug.Log(this.gameObject.name);
+        //Debug.Log(this.gameObject.name);
         eventTrigger = this.gameObject.GetComponent<EventTrigger>();
         AddEventTrigger(OnPointDown, EventTriggerType.PointerDown);
         AddEventTrigger(OnPointUp, EventTriggerType.PointerUp);
