@@ -208,9 +208,9 @@ public class Player : MonoBehaviour {
     {
         if (!this.checkAttacking())
         {
-            this.animationBlock();
+            //this.animationBlock();
             // gui len server
-            //Controller.instance.block();
+            Controller.instance.block();
         }
     }
 
@@ -232,7 +232,15 @@ public class Player : MonoBehaviour {
     }
     public void animationKick()
     {
-        m_Animator.Play("player_kick");
+        if (state == 1)
+        {
+            m_Animator.Play("player_Kick");
+        }
+        else if (state == 2)
+        {
+            m_Animator.Play("player_SitKick");
+        }
+        //m_Animator.Play("player_Kick");
     }
     public void animationJump()
     {
@@ -242,11 +250,11 @@ public class Player : MonoBehaviour {
     {
         if (state == 1)
         {
-            m_Animator.SetTrigger("player_block");
+            m_Animator.Play("player_Block");
         }
         else if (state == 2)
         {
-            m_Animator.SetTrigger("player_sitblock");
+            m_Animator.Play("player_SitBlock");
         }
     }
 
@@ -272,7 +280,10 @@ public class Player : MonoBehaviour {
         if (!m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_hit"))
         {
             m_Animator.Play("player_hit");
-            this.health -= damge;
+            if (this.health > 0)
+            {
+                this.health -= damge;
+            }
             HealthImage.transform.localScale = new Vector2(health / 100, 1);
         }
     }
@@ -315,7 +326,8 @@ public class Player : MonoBehaviour {
             
             if ((m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_H_punch")
               || m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_M_punch") 
-              || m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_kick"))
+              || m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_Kick")
+              || m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_SitKick"))
               && !attacked) 
             {
                 //playerTest = player2;
