@@ -200,14 +200,28 @@ public class JoyStickController : MonoBehaviour {
         if (block)
         {
             player.block();
-            i = 1;
+            if (player.state == 1)
+            {
+                i = 1;
+                Debug.Log("1");
+            }
+            if (player.state == 2)
+            {
+                i = 2;
+            }
         }
         else {
             //player.animationIdle();
             // Dung bien i: chi sau khi action Block thi moi tro ve idle
             if (i == 1)
             {
+                Debug.Log("Ve trang thai ban dau");
                 player.idle();
+                i = 0;
+            }
+            if (i == 2)
+            {
+                player.moveDown();
                 i = 0;
             }
         }

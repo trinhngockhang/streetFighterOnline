@@ -208,9 +208,9 @@ public class Player : MonoBehaviour {
     {
         if (!this.checkAttacking())
         {
-            //this.animationBlock();
+            this.animationBlock();
             // gui len server
-            Controller.instance.block();
+            //Controller.instance.block();
         }
     }
 
@@ -240,8 +240,16 @@ public class Player : MonoBehaviour {
     }
     public void animationBlock()
     {
-        m_Animator.SetTrigger("player_block");
+        if (state == 1)
+        {
+            m_Animator.SetTrigger("player_block");
+        }
+        else if (state == 2)
+        {
+            m_Animator.SetTrigger("player_sitblock");
+        }
     }
+
     public void animationIdle()
     {
         m_Animator.SetTrigger("player_idle");
