@@ -253,16 +253,18 @@ public class Controller : MonoBehaviour
     private void OnUserConnected(SocketIOEvent evt)
     {
         GameObject otherPlayer;
-        Player typePlayer = getTypePlayer(evt.data.GetField("character").ToString());
+        string characterId = evt.data.GetField("character").ToString();
+        Debug.Log("Id Nhan duoc tu server:" + characterId);
+        Player typePlayer = getTypePlayer(characterId);
         if (firstPlayerinRoom)
         {
             temp = spawnPositionSecond;
-            otherPlayer = GameObject.Instantiate(playGameobjFirst.gameObject, temp, Quaternion.Euler(0, 180, 0)) as GameObject;
+            otherPlayer = GameObject.Instantiate(typePlayer.gameObject, temp, Quaternion.Euler(0, 180, 0)) as GameObject;
         }
         else
         {
             temp = spawnPositionFirst;
-            otherPlayer = GameObject.Instantiate(playGameobjSecond.gameObject, temp, Quaternion.identity) as GameObject;
+            otherPlayer = GameObject.Instantiate(typePlayer.gameObject, temp, Quaternion.identity) as GameObject;
         }
         //Debug.Log("GEt the message server: " + evt + "user connected") ;
 
@@ -288,8 +290,10 @@ public class Controller : MonoBehaviour
 
     }
     private Player getTypePlayer(string n){
-        Debug.Log("id character truyen vao: " + n.ToString());
-        switch(n.ToString()){
+        string converted = n.Replace("\"", "").Replace("\"", "");
+        Debug.Log("id character truyen vao: " +converted);
+        switch(converted)
+        {
             case "1": return CamyPlayer;
             case "2": return BarogPlayer;
             case "3": return BlankaPlayer;
@@ -310,19 +314,19 @@ public class Controller : MonoBehaviour
         Dictionary<string, string> data = new Dictionary<string, string>();
         GameObject player;
         Debug.Log("nhan duoc PLAY");
-        Debug.Log("my character: " + myCharacter);
+        Debug.Log("my character id: " + myCharacter);
         Player typePlayer = getTypePlayer(myCharacter);
         data["gaming"] = "3";
         socket.Emit("CHANGESTATUS",new JSONObject(data));
         if (!firstPlayerinRoom)
         {
             temp = spawnPositionSecond;
-            player = GameObject.Instantiate(playGameobjFirst.gameObject, temp, Quaternion.Euler(0, 180, 0)) as GameObject;
+            player = GameObject.Instantiate(typePlayer.gameObject, temp, Quaternion.Euler(0, 180, 0)) as GameObject;
         }
         else
         {
             temp = spawnPositionFirst;
-            player = GameObject.Instantiate(playGameobjSecond.gameObject, temp, Quaternion.identity) as GameObject;
+            player = GameObject.Instantiate(typePlayer.gameObject, temp, Quaternion.identity) as GameObject;
         }
         //Debug.Log("GEt the message server: " + evt + "userplay");
        
