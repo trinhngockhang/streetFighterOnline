@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2703866812875950426}
   - component: {fileID: 65672753028556444}
   - component: {fileID: 54124262629829066}
+  - component: {fileID: 30225976}
   m_Layer: 0
   m_Name: Ryu
   m_TagString: Player
@@ -95,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3e8e6f7a4383984c8bb372c8fd912f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myBody: {fileID: 0}
+  myBody: {fileID: 54124262629829066}
   playerName: 
   position: {x: 0, y: 0}
   id: 
@@ -154,3 +155,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &30225976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7342518335790184496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7794b54cc02a247be8d51c1b9d25bc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Health: 100
+  Damge: 30
+  speed: 10

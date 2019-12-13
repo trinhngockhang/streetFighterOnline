@@ -1421,9 +1421,9 @@ MonoBehaviour:
   HealthBar2: {fileID: 1720479067}
   camera: {fileID: 0}
   infoPanel: {fileID: 400660821}
-  playGameobjFirst: {fileID: 114465299688733656, guid: cd24858d06d6a439c8917780742eac03,
+  playGameobjFirst: {fileID: 114218884136777590, guid: b44e5c13ebae57e4e90bb6f2ffa93f64,
     type: 3}
-  playGameobjSecond: {fileID: 114013603523570036, guid: 48e297e4025944365ad7c05e3b6c1e0b,
+  playGameobjSecond: {fileID: 114246947965469070, guid: 9b5ea057a57e1b14b9ee93bea20cf131,
     type: 3}
   CamyPlayer: {fileID: 0}
   GuilePlayer: {fileID: 0}
