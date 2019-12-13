@@ -9,13 +9,14 @@ public class Player : MonoBehaviour {
     // vi tri
     public Vector2 position;
     // luong damge 1 hit
-    int damge = 10;
+    int enemyDamge = 10;
     // id tu server 
     public string id;
     public int direct = 0; // director of tank,1234 up right down left
     // tap instance
     public static Player instance;
     // mau
+    private float maxHealth = 100f;
     private float health = 100f;
     public float fireRate = 0.5F;
     private float nextFire = 0.0F;
@@ -44,6 +45,15 @@ public class Player : MonoBehaviour {
 
     public void test() {
         //Debug.Log("chay dc ne");
+    }
+
+    public void setEnemyDamge(int n){
+        this.enemyDamge = n;
+    }
+
+    public void setMyHealth(float n){
+        this.maxHealth = n;
+        this.health = n;
     }
 
     public void setName(bool first, Text textPlayer1, Text Player2, HealthBar HealthBar1, HealthBar HealthBar2)
@@ -282,9 +292,9 @@ public class Player : MonoBehaviour {
             m_Animator.Play("player_hit");
             if (this.health > 0)
             {
-                this.health -= damge;
+                this.health = Mathf.Max(0, this.health - enemyDamge);
             }
-            HealthImage.transform.localScale = new Vector2(health / 100, 1);
+            HealthImage.transform.localScale = new Vector2(health / maxHealth, 1);
         }
     }
     private void OnTriggerEnter(Collider other)

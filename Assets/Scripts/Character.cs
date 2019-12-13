@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    public int Health;
+    public float Health;
     public int Damge;
     public float speed;
 

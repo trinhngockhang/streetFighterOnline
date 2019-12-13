@@ -174,7 +174,7 @@ a8638143f579d9683bc9681c2b5ba09d Assembly-CSharp.dll:.CameraCotroller
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:.FightPanel
 3b760e6526e13f7504f59e210145899a Unity.TextMeshPro.dll:TMPro.TextMeshProUGUI
 507174d46dacbc5fe45e28485db5dd1e Unity.Analytics.DataPrivacy.dll:UnityEngine.Analytics.DataPrivacyButton
-45527471833ac110155c5dd11faa1f20 Assembly-CSharp.dll:.Character
+24afcde94c2979b5e84035158ad74afe Assembly-CSharp.dll:.Character
 d251bf88db6c95a6b1aa0b69298da9ef UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
 d93f4f4c1fd32dcdaf045d077e643698 Assembly-CSharp.dll:.ButtonFight
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:.WachButton

@@ -39,7 +39,8 @@ public class Controller : MonoBehaviour
     public bool gaming = false;
     // id player type
     public string myCharacter;
-
+    // my damge
+    int myDamge;
     Vector2 spawnPositionFirst = new Vector2(-5, -2.65f);
     Vector2 spawnPositionSecond = new Vector2(5, -2.65f);
     Vector2 temp;
@@ -270,6 +271,11 @@ public class Controller : MonoBehaviour
 
         otherPlayCom = otherPlayer.GetComponent<Player>();
         otherPlayCom.playerName = namePlayer;
+        // set chi so
+        otherPlayCom.setMyHealth(typePlayer.GetComponent<Character>().Health);
+        otherPlayCom.setEnemyDamge(myDamge);
+        playerCom.setEnemyDamge(typePlayer.GetComponent<Character>().Damge);
+
         //  otherPlayer.transform.position = JsontoVector2(JsonToString(evt.data.GetField("position").ToString(), "\""));
         // otherPlayCom.id = JsonToString(evt.data.GetField("id").ToString(), "\"");
         otherPlayCom.setName(!firstPlayerinRoom, textNamePlayer1, textNamePlayer2,HealthBar1,HealthBar2);
@@ -335,6 +341,9 @@ public class Controller : MonoBehaviour
         joyStick.ActionJoystick();
         playerCom = player.GetComponent<Player>();
         playerCom.playerName = namePlayer;
+        // set chi so
+        playerCom.setMyHealth(typePlayer.GetComponent<Character>().Health);
+        myDamge = typePlayer.GetComponent<Character>().Damge;
         // playerCom.setName();
         joyStick.player = playerCom;
         playerCom.setName(firstPlayerinRoom, textNamePlayer1, textNamePlayer2, HealthBar1, HealthBar2);
