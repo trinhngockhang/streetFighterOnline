@@ -11,13 +11,23 @@ public class Controller : MonoBehaviour
     public LoginPanelController loginPanel;
     public JoyStickController joyStick;
     public SocketIOComponent socket;
+    public characterPanel characterPanel;
+    public WaitingPanel waitingPanel;
     public Text textNamePlayer1;
     public Text textNamePlayer2;
     public HealthBar HealthBar1;
     public HealthBar HealthBar2;
     public CameraCotroller camera;
+    public InfoPanel infoPanel;
     public Player playGameobjFirst;
     public Player playGameobjSecond;
+    // 5 nhan vat
+    public Player CamyPlayer;
+    public Player GuilePlayer;
+    public Player BarogPlayer;
+    public Player BlankaPlayer;
+    public Player RyuPlayer;
+    //
     public Player playerCom;
     public Player otherPlayCom;
     public bool firstPlayerinRoom;
@@ -27,6 +37,9 @@ public class Controller : MonoBehaviour
     public string idPlayer2;
     public static Controller instance;
     public bool gaming = false;
+    // id player type
+    public string myCharacter;
+
     Vector2 spawnPositionFirst = new Vector2(-5, -2.65f);
     Vector2 spawnPositionSecond = new Vector2(5, -2.65f);
     Vector2 temp;
@@ -35,6 +48,7 @@ public class Controller : MonoBehaviour
         StartCoroutine(ConnectServer());
         socket.On("USER_CONNECTED", OnUserConnected);
         socket.On("PLAY", OnUserPlay);
+        socket.On("CHARACTER_SELECT", OnCharacterSelect);
         _makeInstance();
         socket.On("UPDATEPOSITION", onUserMove);
         socket.On("PERMISMOVE", permisMove);
@@ -239,20 +253,21 @@ public class Controller : MonoBehaviour
     private void OnUserConnected(SocketIOEvent evt)
     {
         GameObject otherPlayer;
+        Player typePlayer = getTypePlayer(evt.data.GetField("character").ToString());
         if (firstPlayerinRoom)
         {
             temp = spawnPositionSecond;
-            otherPlayer = GameObject.Instantiate(playGameobjSecond.gameObject, temp, Quaternion.Euler(0, 180, 0)) as GameObject;
+            otherPlayer = GameObject.Instantiate(playGameobjFirst.gameObject, temp, Quaternion.Euler(0, 180, 0)) as GameObject;
         }
         else
         {
             temp = spawnPositionFirst;
-            otherPlayer = GameObject.Instantiate(playGameobjFirst.gameObject, temp, Quaternion.identity) as GameObject;
+            otherPlayer = GameObject.Instantiate(playGameobjSecond.gameObject, temp, Quaternion.identity) as GameObject;
         }
         //Debug.Log("GEt the message server: " + evt + "user connected") ;
 
         otherPlayCom = otherPlayer.GetComponent<Player>();
-        otherPlayCom.playerName = JsonToString(evt.data.GetField("name").ToString(), "\"");
+        otherPlayCom.playerName = namePlayer;
         //  otherPlayer.transform.position = JsontoVector2(JsonToString(evt.data.GetField("position").ToString(), "\""));
         // otherPlayCom.id = JsonToString(evt.data.GetField("id").ToString(), "\"");
         otherPlayCom.setName(!firstPlayerinRoom, textNamePlayer1, textNamePlayer2,HealthBar1,HealthBar2);
@@ -260,93 +275,96 @@ public class Controller : MonoBehaviour
         //Debug.Log("position Player2 : " + Player2.transform.position);
 
     }
+    public void moveToWaiting(){
+        characterPanel.gameObject.SetActive(false);
+        waitingPanel.gameObject.SetActive(true);
+    }
+    private void OnCharacterSelect(SocketIOEvent evt){
+        bg.gameObject.SetActive(false);
+        loginPanel.gameObject.SetActive(false);
+        characterPanel.gameObject.SetActive(true);
+    }
+    private void OnWaiting(SocketIOEvent evt){
+
+    }
+    private Player getTypePlayer(string n){
+        Debug.Log("id character truyen vao: " + n.ToString());
+        switch(n.ToString()){
+            case "1": return CamyPlayer;
+            case "2": return BarogPlayer;
+            case "3": return BlankaPlayer;
+            case "4": return GuilePlayer;
+            case "5": return RyuPlayer; 
+            default: return BarogPlayer;
+        }
+    }
     private void OnUserPlay(SocketIOEvent evt)
     {
+        // change ui
+        Map.gameObject.SetActive(true);
+        infoPanel.gameObject.SetActive(true);
+        waitingPanel.gameObject.SetActive(false);
+        bg.gameObject.SetActive(false);
+        loginPanel.gameObject.SetActive(false);
+        // get data
         Dictionary<string, string> data = new Dictionary<string, string>();
         GameObject player;
-        data["gaming"] = "true";
+        Debug.Log("nhan duoc PLAY");
+        Debug.Log("my character: " + myCharacter);
+        Player typePlayer = getTypePlayer(myCharacter);
+        data["gaming"] = "3";
         socket.Emit("CHANGESTATUS",new JSONObject(data));
         if (!firstPlayerinRoom)
         {
             temp = spawnPositionSecond;
-            player = GameObject.Instantiate(playGameobjSecond.gameObject, temp, Quaternion.Euler(0, 180, 0)) as GameObject;
+            player = GameObject.Instantiate(playGameobjFirst.gameObject, temp, Quaternion.Euler(0, 180, 0)) as GameObject;
         }
         else
         {
             temp = spawnPositionFirst;
-            player = GameObject.Instantiate(playGameobjFirst.gameObject, temp, Quaternion.identity) as GameObject;
+            player = GameObject.Instantiate(playGameobjSecond.gameObject, temp, Quaternion.identity) as GameObject;
         }
         //Debug.Log("GEt the message server: " + evt + "userplay");
-        Map.gameObject.SetActive(true);
-        bg.gameObject.SetActive(false);
-        loginPanel.gameObject.SetActive(false);
+       
         //Debug.Log("chuan bi active joystick");
         joyStick.gameObject.SetActive(true);
         joyStick.ActionJoystick();
         playerCom = player.GetComponent<Player>();
-        playerCom.playerName = JsonToString(evt.data.GetField("name").ToString(), "\"");
+        playerCom.playerName = namePlayer;
         // playerCom.setName();
         joyStick.player = playerCom;
         playerCom.setName(firstPlayerinRoom, textNamePlayer1, textNamePlayer2, HealthBar1, HealthBar2);
     }
     public void h_punch()
     {
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data["enemyid"] = idPlayer2;
-        data["enemyid"] = data["enemyid"].Remove(0, 1);
-        data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
-        socket.Emit("PLAYER_H_PUNCH", new JSONObject(data));
+        socket.Emit("PLAYER_H_PUNCH", getIdEnemy());
     }
     public void kick()
     {
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data["enemyid"] = idPlayer2;
-        data["enemyid"] = data["enemyid"].Remove(0, 1);
-        data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
-        socket.Emit("PLAYER_KICK", new JSONObject(data));
+        socket.Emit("PLAYER_KICK", getIdEnemy());
     }
     public void attack()
     {
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data["enemyid"] = idPlayer2;
-        data["enemyid"] = data["enemyid"].Remove(0, 1);
-        data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
-        socket.Emit("PLAYER_ATTACK", new JSONObject(data));
+        socket.Emit("PLAYER_ATTACK", getIdEnemy());
     }
     public void jump()
     {
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data["enemyid"] = idPlayer2;
-        data["enemyid"] = data["enemyid"].Remove(0, 1);
-        data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
-        socket.Emit("PLAYER_JUMP", new JSONObject(data));
+        socket.Emit("PLAYER_JUMP", getIdEnemy());
     }
 
     public void block()
     {
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data["enemyid"] = idPlayer2;
-        data["enemyid"] = data["enemyid"].Remove(0, 1);
-        data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
-        socket.Emit("PLAYER_BLOCK", new JSONObject(data));
+        socket.Emit("PLAYER_BLOCK", getIdEnemy());
     }
 
     public void idle()
     {
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data["enemyid"] = idPlayer2;
-        data["enemyid"] = data["enemyid"].Remove(0, 1);
-        data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
-        socket.Emit("PLAYER_IDLE", new JSONObject(data));
+        socket.Emit("PLAYER_IDLE", getIdEnemy());
     }
 
     public void moveDown()
     {
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data["enemyid"] = idPlayer2;
-        data["enemyid"] = data["enemyid"].Remove(0, 1);
-        data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
-        socket.Emit("PLAYER_DOWN", new JSONObject(data));
+        socket.Emit("PLAYER_DOWN", getIdEnemy());
     }
     public void otherPlayerDown(SocketIOEvent obj)
     {
@@ -358,12 +376,17 @@ public class Controller : MonoBehaviour
     }
     public void moveUp()
     {
+        socket.Emit("PLAYER_UP", getIdEnemy());
+    }
+
+    public JSONObject getIdEnemy(){
         Dictionary<string, string> data = new Dictionary<string, string>();
         data["enemyid"] = idPlayer2;
         data["enemyid"] = data["enemyid"].Remove(0, 1);
         data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
-        socket.Emit("PLAYER_UP", new JSONObject(data));
+        return new JSONObject(data);
     }
+
     IEnumerator ConnectServer()
     {
         yield return new WaitForSeconds(0.2f);
