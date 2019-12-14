@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 public class Player : MonoBehaviour {
+    // am thanh
+    public AudioClip hitAudio;
+    public AudioClip getHitAudio;
+    public AudioClip winAudio;
+    private AudioSource audioSource;
     public Rigidbody myBody;
     // ten player 
     public string playerName;
@@ -81,13 +86,17 @@ public class Player : MonoBehaviour {
     {
         return health;
     }
-
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
     private void Start()
     {
         playerY = myBody.position.y;
         firstPlayer = true;
         m_Animator = this.GetComponent<Animator>();
         this.name = playerName;
+       
         Physics.gravity = new Vector3(0, -15F, 0);
         _makeInstance();
     }
@@ -239,6 +248,7 @@ public class Player : MonoBehaviour {
             m_Animator.Play("player_H_punch");
         else if (state == 2)
             m_Animator.Play("player_M_punch");
+        audioSource.PlayOneShot(hitAudio);
     }
     public void animationKick()
     {
@@ -250,6 +260,7 @@ public class Player : MonoBehaviour {
         {
             m_Animator.Play("player_SitKick");
         }
+        audioSource.PlayOneShot(hitAudio);
         //m_Animator.Play("player_Kick");
     }
     public void animationJump()
@@ -290,6 +301,7 @@ public class Player : MonoBehaviour {
         if (!m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_hit"))
         {
             m_Animator.Play("player_hit");
+            audioSource.PlayOneShot(getHitAudio);
             if (this.health > 0)
             {
                 this.health = Mathf.Max(0, this.health - enemyDamge);
@@ -324,6 +336,9 @@ public class Player : MonoBehaviour {
         //Debug.Log("het va cham");
     }
 
+    public void playWinAudio(){
+        // audioSource.PlayOneShot(winAudio);
+    }
     private void playerColl(Collision collision){
         float positionPlayerX = this.transform.position.x;
         float positionEnemyX = collision.transform.position.x;

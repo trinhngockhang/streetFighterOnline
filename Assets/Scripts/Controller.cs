@@ -39,6 +39,8 @@ public class Controller : MonoBehaviour
     public bool gaming = false;
     // id player type
     public string myCharacter;
+    // am thanh
+    private AudioSource source;
     // my damge
     int myDamge;
     Vector2 spawnPositionFirst = new Vector2(-5, -2.65f);
@@ -73,6 +75,7 @@ public class Controller : MonoBehaviour
         
         // joyStick.gameObject.SetActive(false);
         loginPanel.playBtn.onClick.AddListener(OnClickPlayBtn);
+        source = GetComponent<AudioSource>();
         // joyStick.onCommanMove += OnCommandMove;
     }
     void _makeInstance()
