@@ -15,73 +15,50 @@ public class CharacterController : MonoBehaviour
     public Image guile;
     public Image ryu;
    
-    public void clickCamy(){
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data["gaming"] = "2";
-        Debug.Log("ID player 2: " + Controller.instance.idPlayer2);
-        data["id"] = Controller.instance.idPlayer2;
-        data["id"] = data["id"].Remove(0, 1);
-        data["character"] = "1";
-        data["id"] = data["id"].Remove(data["id"].Length - 1, 1);
-        socket.Emit("WAITING", new JSONObject(data));
-        Controller.instance.moveToWaiting();
-        Controller.instance.myCharacter = "1";
-        Debug.Log("Chon Camy");
+    public void clickKen(){
+        selectCharacter("1");
+        Debug.Log("Chon Ken");
     }
     public void clickBarog()
     {
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data["gaming"] = "2";
-        Debug.Log("ID player 2: " + Controller.instance.idPlayer2);
-        data["id"] = Controller.instance.idPlayer2;
-        data["id"] = data["id"].Remove(0, 1);
-        data["id"] = data["id"].Remove(data["id"].Length - 1, 1);
-        data["character"] = "2";
-        socket.Emit("WAITING", new JSONObject(data));
-        Controller.instance.moveToWaiting();
-        Controller.instance.myCharacter = "2";
+        selectCharacter("2");
         Debug.Log("Chon barog" + Controller.instance.idPlayer2);
     }
     public void clickBlanka()
     {
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data["gaming"] = "2";
-        Debug.Log("ID player 2: " + Controller.instance.idPlayer2);
-        data["id"] = Controller.instance.idPlayer2;
-        data["character"] = "3";
-        data["id"] = data["id"].Remove(0, 1);
-        data["id"] = data["id"].Remove(data["id"].Length - 1, 1);
-        socket.Emit("WAITING", new JSONObject(data));
-        Controller.instance.myCharacter = "3";
-        Controller.instance.moveToWaiting();
+        selectCharacter("3");
         Debug.Log("Chon blanka");
     }
     public void clickGuile()
     {
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data["gaming"] = "2";
-        data["character"] = "4";
-        Debug.Log("ID player 2: " + Controller.instance.idPlayer2);
-        data["id"] = Controller.instance.idPlayer2;
-        data["id"] = data["id"].Remove(0, 1);
-        data["id"] = data["id"].Remove(data["id"].Length - 1, 1);
-        socket.Emit("WAITING", new JSONObject(data));
-        Controller.instance.myCharacter = "4";
-        Controller.instance.moveToWaiting();
+        selectCharacter("4");
         Debug.Log("Chon guile");
     }
     public void clickRyu()
     {
+        selectCharacter("5");
+        Debug.Log("Chon ryu");
+    }
+    public void clickChunLi()
+    {
+        selectCharacter("6");
+        Debug.Log("Chon Chun-Li");
+    }
+    public void clickT()
+    {
+        selectCharacter("7");
+        Debug.Log("Chon T");
+    }
+    public void selectCharacter(string n){
         Dictionary<string, string> data = new Dictionary<string, string>();
         data["gaming"] = "2";
-        data["character"] = "5";
+        data["character"] = n;
         Debug.Log("ID player 2: " + Controller.instance.idPlayer2);
         data["id"] = Controller.instance.idPlayer2;
         data["id"] = data["id"].Remove(0, 1);
         data["id"] = data["id"].Remove(data["id"].Length - 1, 1);
         socket.Emit("WAITING", new JSONObject(data));
-        Controller.instance.myCharacter = "5";
+        Controller.instance.myCharacter = n;
         Controller.instance.moveToWaiting();
-        Debug.Log("Chon ryu");
     }
 }

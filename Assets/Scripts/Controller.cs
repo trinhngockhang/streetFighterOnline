@@ -22,11 +22,13 @@ public class Controller : MonoBehaviour
     public Player playGameobjFirst;
     public Player playGameobjSecond;
     // 5 nhan vat
-    public Player CamyPlayer;
+    public Player KenPlayer;
     public Player GuilePlayer;
     public Player BarogPlayer;
     public Player BlankaPlayer;
     public Player RyuPlayer;
+    public Player ChunLiPlayer;
+    public Player TPlayer;
     //
     public Player playerCom;
     public Player otherPlayCom;
@@ -303,11 +305,13 @@ public class Controller : MonoBehaviour
         Debug.Log("id character truyen vao: " +converted);
         switch(converted)
         {
-            case "1": return CamyPlayer;
+            case "1": return KenPlayer;
             case "2": return BarogPlayer;
             case "3": return BlankaPlayer;
             case "4": return GuilePlayer;
             case "5": return RyuPlayer; 
+            case "6": return ChunLiPlayer;
+            case "7": return TPlayer;
             default: return BarogPlayer;
         }
     }
