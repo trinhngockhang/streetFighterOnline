@@ -1,6 +1,6 @@
 OSXUniversal
 PlayerPath?
-/Users/apple/Documents/Code/Tank Online/Build File/New charactor/LTU32_online213324.app
+/Users/apple/Documents/Code/Tank Online/Build File/New charactor/LTU32_online.app
 SceneListBegin?
 Assets/Scenes/GamePlay.unity
 Assets/Scenes/Play.unity
@@ -126,7 +126,7 @@ d251bf88db6c95a6b1aa0b69298da9ef UnityEngine.SpatialTracking.dll:UnityEngine.Spa
 b8a5e8091ab0b8861d2add371082c5e0 Unity.TextMeshPro.dll:TMPro.TMP_SpriteAsset
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:.characterPanel
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:.Player2Controller
-e1483fee77774e29374c5217cc207326 Assembly-CSharp.dll:.CharacterController
+fc6d8c9f5aa4863ded2121f3544c0242 Assembly-CSharp.dll:.CharacterController
 a3bd31b274fe1503674857a6ce3a4084 Assembly-CSharp.dll:.Player1Controller
 b3ab2106268377ffe25dd18ac23dca28 Unity.TextMeshPro.dll:TMPro.TMP_Asset
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:.InfoPanel
