@@ -3,19 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 public class Player : MonoBehaviour {
+    // am thanh
+    public AudioClip hitAudio;
+    public AudioClip getHitAudio;
+    public AudioClip winAudio;
+    private AudioSource audioSource;
     public Rigidbody myBody;
     // ten player 
     public string playerName;
     // vi tri
     public Vector2 position;
     // luong damge 1 hit
-    int damge = 10;
+    int enemyDamge = 10;
     // id tu server 
     public string id;
     public int direct = 0; // director of tank,1234 up right down left
     // tap instance
     public static Player instance;
     // mau
+    private float maxHealth = 100f;
     private float health = 100f;
     public float fireRate = 0.5F;
     private float nextFire = 0.0F;
@@ -46,6 +52,15 @@ public class Player : MonoBehaviour {
         //Debug.Log("chay dc ne");
     }
 
+    public void setEnemyDamge(int n){
+        this.enemyDamge = n;
+    }
+
+    public void setMyHealth(float n){
+        this.maxHealth = n;
+        this.health = n;
+    }
+
     public void setName(bool first, Text textPlayer1, Text Player2, HealthBar HealthBar1, HealthBar HealthBar2)
     {
         //Debug.Log("la ng dau toen : " + first);
@@ -71,13 +86,17 @@ public class Player : MonoBehaviour {
     {
         return health;
     }
-
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
     private void Start()
     {
         playerY = myBody.position.y;
         firstPlayer = true;
         m_Animator = this.GetComponent<Animator>();
         this.name = playerName;
+       
         Physics.gravity = new Vector3(0, -15F, 0);
         _makeInstance();
     }
@@ -208,9 +227,9 @@ public class Player : MonoBehaviour {
     {
         if (!this.checkAttacking())
         {
-            this.animationBlock();
+            //this.animationBlock();
             // gui len server
-            //Controller.instance.block();
+            Controller.instance.block();
         }
     }
 
@@ -229,10 +248,20 @@ public class Player : MonoBehaviour {
             m_Animator.Play("player_H_punch");
         else if (state == 2)
             m_Animator.Play("player_M_punch");
+        audioSource.PlayOneShot(hitAudio);
     }
     public void animationKick()
     {
-        m_Animator.Play("player_kick");
+        if (state == 1)
+        {
+            m_Animator.Play("player_Kick");
+        }
+        else if (state == 2)
+        {
+            m_Animator.Play("player_SitKick");
+        }
+        audioSource.PlayOneShot(hitAudio);
+        //m_Animator.Play("player_Kick");
     }
     public void animationJump()
     {
@@ -242,11 +271,11 @@ public class Player : MonoBehaviour {
     {
         if (state == 1)
         {
-            m_Animator.SetTrigger("player_block");
+            m_Animator.Play("player_Block");
         }
         else if (state == 2)
         {
-            m_Animator.SetTrigger("player_sitblock");
+            m_Animator.Play("player_SitBlock");
         }
     }
 
@@ -272,8 +301,12 @@ public class Player : MonoBehaviour {
         if (!m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_hit"))
         {
             m_Animator.Play("player_hit");
-            this.health -= damge;
-            HealthImage.transform.localScale = new Vector2(health / 100, 1);
+            audioSource.PlayOneShot(getHitAudio);
+            if (this.health > 0)
+            {
+                this.health = Mathf.Max(0, this.health - enemyDamge);
+            }
+            HealthImage.transform.localScale = new Vector2(health / maxHealth, 1);
         }
     }
     private void OnTriggerEnter(Collider other)
@@ -303,6 +336,9 @@ public class Player : MonoBehaviour {
         //Debug.Log("het va cham");
     }
 
+    public void playWinAudio(){
+        // audioSource.PlayOneShot(winAudio);
+    }
     private void playerColl(Collision collision){
         float positionPlayerX = this.transform.position.x;
         float positionEnemyX = collision.transform.position.x;
@@ -315,7 +351,8 @@ public class Player : MonoBehaviour {
             
             if ((m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_H_punch")
               || m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_M_punch") 
-              || m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_kick"))
+              || m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_Kick")
+              || m_Animator.GetCurrentAnimatorStateInfo(0).IsName("player_SitKick"))
               && !attacked) 
             {
                 //playerTest = player2;

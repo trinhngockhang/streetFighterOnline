@@ -9,7 +9,6 @@ public class OnlineUserController : MonoBehaviour {
     public SocketIOComponent socket;
     public LoginPanelController loginPanel;
     public OnlineUser onlineUser;
-    public InfoPanel infoPanel;
     public User user;
     public FightPanel fightPanel;
     private string nameEnemy;
@@ -35,7 +34,6 @@ public class OnlineUserController : MonoBehaviour {
     {
         Controller.instance.gaming = true;
         //Debug.Log("thang kia dong y r");
-        infoPanel.gameObject.SetActive(true);
         fightPanel.gameObject.SetActive(false);
         onlineUser.gameObject.SetActive(false);
         Controller.instance.firstPlayerinRoom = false;
@@ -47,7 +45,8 @@ public class OnlineUserController : MonoBehaviour {
         dataSend["enemyid"] = dataSend["enemyid"].Remove(0, 1);
         dataSend["enemyid"] = dataSend["enemyid"].Remove(dataSend["enemyid"].Length - 1, 1);
         //Debug.Log("id enemy gui len: " + dataSend["enemyid"]);
-        socket.Emit("PLAY", new JSONObject(dataSend));
+        // socket.Emit("PLAY", new JSONObject(dataSend));
+        socket.Emit("CHARACTER_SELECT", new JSONObject(dataSend));
     }
 
     void beFight(SocketIOEvent data)
@@ -68,7 +67,6 @@ public class OnlineUserController : MonoBehaviour {
     {
         if(Controller.instance.gaming == false)
         {
-            
             onlineUser.gameObject.SetActive(true);
             loginPanel.gameObject.SetActive(false);
             // Debug.Log("id " + socket);
@@ -133,7 +131,6 @@ public class OnlineUserController : MonoBehaviour {
     public void sayYes()
     {
         Controller.instance.gaming = true;
-        infoPanel.gameObject.SetActive(true);
         Controller.instance.firstPlayerinRoom = true;
         onlineUser.gameObject.SetActive(false);
         fightPanel.gameObject.SetActive(false);
@@ -145,7 +142,8 @@ public class OnlineUserController : MonoBehaviour {
         socket.Emit("AGREE",new JSONObject(data["enemyid"]));
         data["enemyid"] = data["enemyid"].Remove(0, 1);
         data["enemyid"] = data["enemyid"].Remove(data["enemyid"].Length - 1, 1);
-        socket.Emit("PLAY", new JSONObject(data));
+        // socket.Emit("PLAY", new JSONObject(data));
+        socket.Emit("CHARACTER_SELECT", new JSONObject(data));
     }
 
     public void sendRq(string idEnemy,string nameUser)

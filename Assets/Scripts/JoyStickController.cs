@@ -223,6 +223,7 @@ public class JoyStickController : MonoBehaviour {
             {
                 player.moveDown();
                 i = 0;
+                Controller.instance.moveDown();
             }
         }
     }
